@@ -23,7 +23,7 @@ email: irenebejar@correo.ugr.es
 description: >- # this means to ignore newlines until "baseurl:"
   Proyecto para la asignatura de Cloud Computing en el Máster en 
   Ingeniería Informática UGR.
-baseurl:
+baseurl: /
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  ibe16
 
