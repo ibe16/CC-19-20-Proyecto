@@ -3,7 +3,7 @@ Proyecto para la asignatura de Cloud Computing en el Máster en Ingeniería Info
 
 ## Descripción del proyecto
 Con este proyecto se quiere monitorizar los downtimes de las líneas de una fábrica. Consta de 2 entidades:
-- **PlantMonitoring:** Se encarga de leer los datos de las líneas y almacenarlos en una base de datos. Los datos que se almacenan son el intante en el que se pruduce un downtime y la duración de este.
+- **PlantMonitoring:** Se encarga de leer los datos de las líneas y almacenarlos en una base de datos. Los datos que se almacenan son el instante en el que se pruduce un downtime y la duración de este.
 - **Notifier:** Su función es notificar a una lista de contactos que se ha producido un downtime y volver a avisar cuando se restablezca la línea.
 
 ## Arquitectura
