@@ -37,4 +37,4 @@ Se usará Consul como sistema de configuración distribuida.
 
 Se proporcionará una API-GETWAY para poder comunicarse con los microservicios.
 
-[imagen]:https://github.com/ibe16/CC-19-20-Proyecto/tree/master/docs/img/MicroServices.jpg
+[imagen]:/img/MicroServices.jpg
