@@ -15,3 +15,5 @@ install:
 script:
   invoke test
   
+after_success:
+  invoke coverage

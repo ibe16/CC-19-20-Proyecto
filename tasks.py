@@ -17,3 +17,7 @@ def install(ctx):
 @task
 def test(ctx):
     run ('pytest')
+
+@task 
+def coverage(ctx):
+    run ('pytest --cov-report=xml --cov=tests/')
