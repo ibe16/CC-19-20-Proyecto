@@ -1,8 +1,17 @@
+#Lenguaje de programación
 language: python
+
+#Distintas versiones para hacer la prueba
 python:
   - "3.6"
   - "3.7"
   - "3.8"
+
+#Instalar las dependencias necesarias
 install:
-  - pip instal -r requirements.txt
+  - pip install -r requirements.txt
+
+#Ejecutar los test
+script:
+  invoke test
   

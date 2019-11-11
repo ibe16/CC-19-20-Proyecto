@@ -1,7 +1,7 @@
 import pytest
 
 import sys
-sys.path.append('../notifier')
+sys.path.append('notifier')
 from Email import Email
 
 @pytest.fixture(scope='session')
