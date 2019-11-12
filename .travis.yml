@@ -3,17 +3,23 @@ language: python
 
 #Distintas versiones para hacer la prueba
 python:
+  - "3.4"
+  - "3.5"
   - "3.6"
+  - "3.6.8" 
   - "3.7"
   - "3.8"
+  - "3.8-dev"
 
 #Instalar las dependencias necesarias
 install:
   - pip install -r requirements.txt
 
-#Ejecutar los test
+#Ejecutar los test unitarios y de cobertura
 script:
   - invoke test
   - invoke coverage
+
+#Enviar resultados test de cobertura a codecov
 after_success:
   - codecov

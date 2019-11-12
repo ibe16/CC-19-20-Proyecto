@@ -37,17 +37,3 @@ class NotificationList:
 
     def __iter__(self):
         return self.__lines.__iter__()
-
-if __name__ == "__main__":
-    n = NotificationList()
-    n.subscribe(1, 'irene@email.com')
-    n.subscribe(1, 'bejar@gmail.com')
-    n.subscribe(2,'irene@email.com')
-
-    n.subscribe(3,'irene.com')
-    print(n)
-
-    n.unsubscribe(2, 'irene@email.com')
-    print(n)
-
-    n.unsubscribe(1, 'irene')

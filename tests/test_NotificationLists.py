@@ -12,6 +12,8 @@ def notification_list():
 def test_subscribe(notification_list):
     notification_list.subscribe(3, 'test@email.com')
     assert str(notification_list) == str({1: ['irene@email.com', 'bejar@gmail.com'], 2: ['irene@email.com'], 3: ['test@email.com']})
+    notification_list.subscribe(2, 'test@email.com')
+    assert str(notification_list) == str({1: ['irene@email.com', 'bejar@gmail.com'], 2: ['irene@email.com', 'test@email.com'], 3: ['test@email.com']})
     assert len(notification_list) == 3
     with pytest.raises(ValueError, match='Email no válido'):
         notification_list.subscribe(4, 'test.email')
