@@ -1,4 +1,4 @@
-pytest==5.2.2
+pytest
 pytest-cov
 codecov
-invoke==1.3.0
+invoke
