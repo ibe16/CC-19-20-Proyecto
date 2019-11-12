@@ -32,3 +32,8 @@ jobs:
       run: |
         pip install pytest-cov
         py.test  --cov-report term --cov=notifier tests/
+    
+    - name: Enviar resultados a Codecov #Envía los resultados del test de cobertura a Codecov para su visualización
+      run: |
+        pip install codecov
+        codecov
