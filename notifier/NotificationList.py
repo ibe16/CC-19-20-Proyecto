@@ -1,16 +1,18 @@
 from Email import Email
 
 class NotificationList:
-    def __init__ (self, lines = {}):
-        self.__lines = lines
+    def __init__ (self):
+        self.__lines = {}
 
     def subscribe(self, id_line, email):
         try:
             if id_line not in self.__lines.keys(): 
                 emails = Email()
                 emails.add(email)   
-                self.__lines[id_line] = emails    
+                self.__lines[id_line] = emails
+                print (type(self.__lines[id_line]))    
             else:
+                print (type(self.__lines[id_line]))
                 self.__lines[id_line].add(email)
         
         except ValueError:
