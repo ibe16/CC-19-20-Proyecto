@@ -102,7 +102,7 @@ Como herramienta de intregración continua se ha usado:
 
 
 [arquitectura]:https://ibe16.github.io/CC-19-20-Proyecto/docs/arquitectura/Arquitectura
-[enlace_dependencias]:https://github.com/ibe16/CC-19-20-Proyecto/requirements.txt
+[enlace_dependencias]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/requirements.txt
 [enlace_tasks]:https://github.com/ibe16/CC-19-20-Proyecto/tasks.py
 [enlace_travis]:https://github.com/ibe16/CC-19-20-Proyecto/.travis.yml
 [tecnologías]:https://ibe16.github.io/CC-19-20-Proyecto/docs/tecnologías/Tecnologías
