@@ -49,7 +49,7 @@ Para poder usar la herramienta de construcción es necesario:
 En cualquiera de los dos casos quedará disponible
 
 ## Herramienta de construcción
-buildtool: Invoke
+buildtool: tasks.py
 
 La herramienta de construcción usada es ```Invoke```.
 
