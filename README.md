@@ -101,8 +101,8 @@ Como herramienta de intregración continua se ha usado:
 > Para más información sobre la configuración **TravisCI** se puede consultar el archivo de configuración [.travis.yml][enlace_travis].
 
 
-[arquitectura]:docs/arquitectura/Arquitectura.md
+[arquitectura]:docs/arquitectura/Arquitectura
 [enlace_dependencias]:requirements.txt
 [enlace_tasks]:tasks.py
 [enlace_travis]:.travis.yml
-[tecnologías]:docs/tecnologías/Tecnologías.md
+[tecnologías]:docs/tecnologías/Tecnologías
