@@ -9,7 +9,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.4, 3.5, 3.6, 3.7] #Versiones que se van a utilizar de Python
+        python-version: [3.5, 3.6, 3.7, 3.8] #Versiones que se van a utilizar de Python
         os: [ubuntu-latest, windows-latest, macOS-latest] #Versiones que se van a utilizar de los SO
 
     steps:
