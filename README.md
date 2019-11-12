@@ -100,9 +100,13 @@ Como herramienta de intregración continua se ha usado:
 1. **TravisCI**: Se encarga de ejecutar los test unitarios y de cobertura del proyecto. Se comprueban que los test funcionan correctamente en las versiones de Python de la 3.4 a las 3.8-dev, para el sistema operatico Linux (por defecto). Los resultados del test de cobertura se mandan a **Codecov** para su visualización. 
 > Para más información sobre la configuración **TravisCI** se puede consultar el archivo de configuración [.travis.yml][enlace_travis].
 
+2. **Github Actions**: Ejecuta tanto los test unitarios como los de cobertura del proyecto en las últimas versiones de Linux, Windows y MacOS. Se comprueban las versiones de Python desde la  3.5 a la 3.8. La versión 3.4 en MacOS da problemas al instalar las dependencias. También puede enviar los resultados de los test de cobertura a **Codecov**, pero se ha omitido esta función para no mandar el mismo resultado por duplicado. 
+> Para más información sobre el workflow usado se puede consultar el archivo [pythonpackage.yml][enlace_workflow] que incluye notas aclarotorias.
+
 
 [arquitectura]:https://ibe16.github.io/CC-19-20-Proyecto/docs/arquitectura/Arquitectura
 [enlace_dependencias]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/requirements.txt
 [enlace_tasks]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/tasks.py
 [enlace_travis]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/.travis.yml
+[enlace_workflow]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/.github/workflows/pythonpackage.yml
 [tecnologías]:https://ibe16.github.io/CC-19-20-Proyecto/docs/tecnologías/Tecnologías
