@@ -1,6 +1,15 @@
 # Monitorización de líneas de producción
 Proyecto para la asignatura de Cloud Computing en el Máster en Ingeniería Informática UGR.
 
+
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Build Status](https://travis-ci.org/ibe16/CC-19-20-Proyecto.svg?branch=master)](https://travis-ci.org/ibe16/CC-19-20-Proyecto)
+[![codecov](https://codecov.io/gh/ibe16/CC-19-20-Proyecto/branch/master/graph/badge.svg)](https://codecov.io/gh/ibe16/CC-19-20-Proyecto)
+[![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
+
+
+---
+
 ## Descripción del proyecto
 Con este proyecto se quiere monitorizar los downtimes de las líneas de una fábrica. Consta de 2 entidades:
 - **PlantMonitoring:** Se encarga de leer los datos de las líneas y almacenarlos en una base de datos. Los datos que se almacenan son el instante en el que se produce un downtime y la duración de este.
@@ -9,42 +18,91 @@ Con este proyecto se quiere monitorizar los downtimes de las líneas de una fáb
 ## Arquitectura
 Como arquitectura se ha eligido una arquitectura basada en microservicios, donde cada microservicio corresponde con las entidades descritas.
 
-![arquitectura][imagen]
-
-Las operaciones que realizará cada microservicio son:
-- **PlantMonitoring:**
-    - Propocionar los datos sobre downtimes entre dos periodos de tiempo
-    - Propocionar los datos sobre las líneas que se están monitorizando
-    - Informar cuando se produzca una parada o cuando vuelva a arrancar la línea
-
-- **Notifier:**
-    - Suscribirse a las notificaciones de una o varias lineas
-    - Borrarse de las notificaciones de una o varias lineas
-    - Información sobre las suscripciones
-
-Debido a que la operación de mandar todas las notificaciones puede ser una operación lenta se usará una cola de tareas (Celery) para no bloquear al microservicio que monitoriza mientras se realiza la operación. El resto de operaciones se realizarán mediante una interfaz REST.
-
-Se proporcionará una API-GATEWAY para poder comunicarse con los microservicios.
-
-[imagen]:/docs/img/MicroServices.jpg
+Más información sobre la [arquitectura][arquitectura].
 
 ## Lenguajes y tecnologías usadas
+El proyecto se desarrolla usando Python más:
+    - Flask para la interfaz REST
+    - Celery para gestionar los eventos
+    - MySQL y MongoDB como bases de datos
+    - Consul para la configuración distribuida
 
-### Lenguaje de programación
-**Python** el lenguaje escogido para programar ambos microservicios. Se ha elegido este lenguaje, a parte de por la sencillez y la rapidez de aprendizaje, por la cantidad de información que hay acerca de él y por permitir escribir un código bastante organizado. También dispone de un montón de módulos que le dan una gran versatilidad ante cualquier problema.
+Más información sobre [lenguajes y tecnologías usadas][tecnologías].
 
-### Framework
-Como microframework para implementar las APIs REST se usará **Flask**. Es bastante común, pero ofrece una serie de ventajas:
-- Es ligero
-- Hay mucha documentación sobre cómo usarlo
-- Fácil de desplegar
-- Cómodo para hacer APIs sencillas (como es mi caso)
+## Prerrequisitos
+Las versiones de Python compatibles con el proyecto son:
+    -Mínima: 3.4
+    -Máxima: 3.8 y su versión de desarrollo
 
-### Bases de datos
-Se usarán **MySQL** para gestionar y consultar mejor los datos de tipo *DATE* y  **MongoDB** para almacenar a donde hay qué mandar las notificaciones, para que sea más cómodo gestionar las listas.
+Para poder usar la herramienta de construcción es necesario:
+1. Instalarla con:
 
-### Cola de eventos
-Por la simplicidad de los eventos a manejar se buscaba una cola de eventos que fuese simple y trabajase a alto nivel. Por lo comentado en clase escogí **Celery**. Hay bastante documentación sobre como configurarlo y usarlo y ofrece más que suficiente para los requisitos de la aplicación. Además de que se integra muy bien con Python.
+    ```
+    pip install invoke
+    ```
 
-### Configuración distribuida
-Como servicio de configuración distribuida se usará **Consul** ya que guarda pares clave-valor y permite registrar los servicios.
+2. Instalar las dependencias
+    ```
+    pip install -r requirements.txt
+    ```
+
+En cualquiera de los dos casos quedará disponible
+
+## Herramienta de construcción
+La herramienta de construcción usada es ```Invoke```
+
+Para poder usar la herramienta de construcción es necesario:
+1. Instalarla con:
+
+    ```shell
+    $ pip install invoke
+    ```
+
+2. Instalar las dependencias
+    ```shell
+    $ pip install -r requirements.txt
+    ```
+
+En cualquiera de los dos casos quedará disponible.
+
+Se han configurado cuatro tareas. Estas son:
+1. Instalar las dependencias necesarias
+    ```shell
+    $ invoke install
+    ```
+    > Instala todas la dependencias necesarias para el proyecto. Si previamente se ha ejecutado ```pip install -r requirements.txt``` no es necasio ejecutar esta tarea.
+
+    > Se pueden consutar las dependencias usadas en el archivo [requirements.txt][enlace_dependencias]
+
+2. Ejecutar los test unitarios 
+    ```shell
+    $ invoke test
+    ```
+    > Ejecuta todos los test unitarios. Para ello se ha usado el framework ```Pytest```.
+
+3. Ejecutar los test de cobertura
+    ```shell
+    $ invoke coverage
+    ```
+    > Ejecuta los test de cobertura y almacena los resultados en un archivo ```.coverage```. Para la ejecución de estos test se ha usado un el módulo ```pytest-cov``` que proporciona ```Pytest```.
+4. Limpiar los archivos generados por los test
+    ```shell
+    $ invoke clean
+    ```
+    >Incluido el archivo ```.coverage```.
+
+En el momento de la ejecución se pueden listar las tareas disponibles usanso ```invoke --list```.
+
+Para más informacoión sobre los comandos que se ejecutan consulte el fichero [tasks.py][enlace_tasks].
+
+## Integración continua
+Como herramienta de intregración continua se ha usado:
+1. **TravisCI**: Se encarga de ejecutar los test unitarios y de cobertura del proyecto. Se comprueban que los test funcionan correctamente en las versiones de Python de la 3.4 a las 3.8-dev, para el sistema operatico Linux (por defecto). Los resultados del test de cobertura se mandan a **Codecov** para su visualización. 
+> Para más información sobre la configuración **TravisCI** se puede consultar el archivo de configuración [.travis.yml][enlace_travis].
+
+
+[arquitectura]:docs/arquitectura/Arquitectura.md
+[enlace_dependencias]:requirements.txt
+[enlace_tasks]:tasks.py
+[enlace_travis]:.travis.yml
+[tecnologías]:docs/tecnologías/Tecnologías.md
