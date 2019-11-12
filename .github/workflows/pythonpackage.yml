@@ -27,3 +27,8 @@ jobs:
       run: |
         pip install pytest
         pytest
+    
+    - name: Testear con pytest-cov
+      run: |
+        pip install pytest-cov
+        py.test  --cov-report term --cov=notifier tests/
