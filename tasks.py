@@ -7,6 +7,7 @@ def clean(ctx):
     run ("rm -d -r .pytest_cache")
     run ("rm -d -r ./tests/__pycache__")
     run ("rm -d -r notifier/__pycache__")
+    run ("rm .coverage")
     print ('Done!')
 
 #instala las dependencias
