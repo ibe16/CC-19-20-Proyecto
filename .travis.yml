@@ -20,6 +20,6 @@ script:
   - invoke test
   - invoke coverage
 
-Enviar resultados test de cobertura a codecov
+#Enviar resultados test de cobertura a codecov
 after_success:
   - codecov
