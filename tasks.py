@@ -20,4 +20,4 @@ def test(ctx):
 
 @task 
 def coverage(ctx):
-    run ('pytest --cov=./')
+    run ('py.test  --cov-report term --cov=tests/')

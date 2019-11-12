@@ -13,7 +13,7 @@ install:
 
 #Ejecutar los test
 script:
-  invoke test
-  
+  - invoke test
+  - invoke coverage
 after_success:
-  invoke coverage
+  - codecov
