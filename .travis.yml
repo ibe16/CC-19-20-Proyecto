@@ -21,5 +21,5 @@ script:
   - invoke coverage
 
 #Enviar resultados test de cobertura a codecov
-after_success:
-  - codecov
+#after_success:
+  #- codecov
