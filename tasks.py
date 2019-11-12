@@ -20,4 +20,4 @@ def test(ctx):
 
 @task 
 def coverage(ctx):
-    run ('py.test  --cov-report term --cov=CC-19-20-Proyecto tests/')
+    run ('py.test  --cov-report term --cov=notifier tests/')
