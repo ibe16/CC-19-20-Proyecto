@@ -31,8 +31,14 @@ Más información sobre [lenguajes y tecnologías usadas][tecnologías].
 
 ## Prerrequisitos
 Las versiones de Python compatibles con el proyecto son:
-    -Mínima: 3.4
-    -Máxima: 3.8 y su versión de desarrollo
+    Linux:
+        -Mínima: 3.4
+        -Máxima: 3.8 y su versión de desarrollo
+    Windows y MacOS:
+        -Mínima: 3.5
+        -Máxima: 3.8
+
+> 
 
 Para poder usar la herramienta de construcción es necesario:
 1. Instalarla con:
