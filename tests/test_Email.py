@@ -1,12 +1,13 @@
 import pytest
 
+import os
 import sys
 sys.path.append('notifier')
-from Email import Email
+import notifier.Email as n
 
 @pytest.fixture(scope='session')
 def email():
-    email = Email()
+    email = n.Email()
     return email
 
 def test_add(email):
