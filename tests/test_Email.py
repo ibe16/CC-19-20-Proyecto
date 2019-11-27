@@ -3,11 +3,11 @@ import pytest
 import os
 import sys
 sys.path.append('notifier')
-import notifier.Email as n
+import Email
 
 @pytest.fixture(scope='session')
 def email():
-    email = n.Email()
+    email = Email.Email()
     return email
 
 def test_add(email):

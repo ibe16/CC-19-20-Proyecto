@@ -2,11 +2,11 @@ import pytest
 
 import sys
 sys.path.append('notifier')
-from notifier import NotificationList as n
+import NotificationList
 
 @pytest.fixture(scope='session')
 def notification_list():
-    list = n.NotificationList()
+    list = NotificationList.NotificationList()
     list.subscribe(1, 'irene@email.com')
     list.subscribe(1, 'bejar@gmail.com')
     list.subscribe(2, 'irene@email.com')
