@@ -1,13 +1,15 @@
-from Email import Email
+from notifier import Email
+import json
 
 class NotificationList:
     def __init__ (self):
         self.__lines = {}
 
+
     def subscribe(self, id_line, email):
         try:
             if id_line not in self.__lines.keys(): 
-                emails = Email()
+                emails = Email.Email()
                 emails.add(email)   
                 self.__lines[id_line] = emails
                 print (type(self.__lines[id_line]))    

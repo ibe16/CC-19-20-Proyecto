@@ -1,8 +1,9 @@
 import re
+import json
 
 class Email:
     def __init__(self):
-        self.__email_list = []
+        self.__email_list = list()
 
     def __validate_email(self, email):
         regex = r'^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
@@ -32,6 +33,16 @@ class Email:
 
     def __iter__(self):
         return self.__email_list.__iter__()
-    
 
-    
+# class EmailEncoder(json.JSONEncoder):
+#     def default(self, obj):
+#         if isinstance(obj, Email):
+#             return obj._Email__email_list
+            
+#         return json.JSONEncoder.default(self, obj)
+
+# class EmailDecoder(json.JSONDecoder):
+#     def __init__(self, *args, **kwargs):
+#         json.JSONDecoder.__init__(self, object_hook=self.object_hook, *args, **kwargs)
+
+#     def object_hook(self, dct):
