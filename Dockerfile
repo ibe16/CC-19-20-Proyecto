@@ -10,6 +10,9 @@ COPY ./notifier/*.py /notifier/
 # Nos colocamos en la raíz para poder ejecutar el microservicio
 WORKDIR /
 
+ARG PORT
+
+ENV PORT=${PORT}
 # Instalamos sólo las dependencias necesarias
 RUN pip install flask gunicorn
 
