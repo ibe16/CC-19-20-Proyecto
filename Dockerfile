@@ -18,4 +18,4 @@ EXPOSE 5000
 
 # Configura el contenedor para correrlo como un ejecutable
 # Esta orden no se ignora cuando se ejecuta el contenedor con parámetros
-CMD ["sh", "-c", "gunicorn -b 0.0.0.0:5000 --workers=4  \"notifier:create_app()\""]
+CMD ["sh", "-c", "gunicorn -b 0.0.0.0:80 --workers=4  \"notifier:create_app()\""]
