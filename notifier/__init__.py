@@ -33,12 +33,12 @@ def create_app(test_config=None):
     #     pass
 
     # Inicializamos la base de datos
-    from . import db
+    from notifier import db
     db.init_app(app)
 
     # Registramos el Blueprint para nuestro servicio
-    from . import notifier
-    app.register_blueprint(notifier.api)
+    from notifier import notifier_rest
+    app.register_blueprint(notifier_rest.api)
 
      # Hello World
     @app.route('/hello')

@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, g
-from notifier.db import get_db
+from db import get_db
 
 api = Blueprint('notifier',__name__, url_prefix='/notifier')
 
@@ -14,7 +14,10 @@ def subscribe():
     db=get_db()
 
     # validar que todos los campos tienen valores
-    if data.items() is None:
+    if data is None:
+        return jsonify({'message': 'JSON not found'})
+
+    if not data.items():
         return jsonify({'message': 'JSON not found'})
 
     for key, value in data.items():
@@ -41,7 +44,10 @@ def unsubscribe():
     db=get_db()
 
     # validar que todos los campos tienen valores
-    if data.items() is None:
+    if data is None:
+        return jsonify({'message': 'JSON not found'})
+        
+    if not data.items():
         return jsonify({'message': 'JSON not found'})
 
     for key, value in data.items():
