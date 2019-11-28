@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, g
-from db import get_db
+from notifier.db import get_db
 
 api = Blueprint('notifier',__name__, url_prefix='/notifier')
 

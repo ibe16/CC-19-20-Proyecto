@@ -1,4 +1,4 @@
-import Email
+from notifier import Email
 import json
 
 class NotificationList:
