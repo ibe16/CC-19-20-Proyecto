@@ -25,13 +25,11 @@ jobs:
 
     - name: Testar con pytest #Instalamos Pytest y pasamos los test unitarios
       run: |
-        pip install pytest
-        pytest
+        invoke test
     
     - name: Testear con pytest-cov
       run: |
-        pip install pytest-cov
-        py.test  --cov-report term --cov=notifier tests/
+        invoke coverage
     
 #    - name: Enviar resultados a Codecov #Envía los resultados del test de cobertura a Codecov para su visualización
 #      run: |
