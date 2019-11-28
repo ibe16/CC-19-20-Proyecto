@@ -2,7 +2,7 @@
 FROM python:3.6-alpine
 
 # Copiamos solo los archivos locales necesarios al contenedor
-COPY ./notifier/*.py /notifier
+COPY ./notifier/*.py /notifier/
 
 # Nos colocamos en la raíz para poder ejecutar el microservicio
 WORKDIR /

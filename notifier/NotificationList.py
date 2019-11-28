@@ -42,9 +42,4 @@ class NotificationList:
     def __iter__(self):
         return self.__lines.__iter__()
 
-if __name__ == "__main__":
-    list = NotificationList()
-    list.subscribe(1, 'irene@email.com')
-    print(list)
-
 
