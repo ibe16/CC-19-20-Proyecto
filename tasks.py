@@ -20,9 +20,9 @@ def install(ctx):
 #ejecuta los test unitarios
 @task
 def test(ctx):
-    run ('pytest')
+    run ('python3 -m pytest')
 
 #ejecuta los test de cobertura
 @task 
 def coverage(ctx):
-    run ('py.test  --cov-report term --cov=notifier tests/')
+    run ('python3 -m pytest  --cov-report term --cov=notifier tests/')
