@@ -14,7 +14,7 @@ WORKDIR /
 RUN pip install flask gunicorn
 
 # Exponemos el puerto 5000 del contenedor
-EXPOSE 5000
+EXPOSE 80
 
 # Configura el contenedor para correrlo como un ejecutable
 # Esta orden no se ignora cuando se ejecuta el contenedor con parámetros
