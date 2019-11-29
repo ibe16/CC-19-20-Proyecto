@@ -10,13 +10,16 @@ COPY ./notifier/*.py /notifier/
 # Nos colocamos en la raíz para poder ejecutar el microservicio
 WORKDIR /
 
-ARG PORT
+# Argumento que se pasa durante la construcción
+ARG PORT=8080
 
+# Establecemos una variable de entorno para el contenedor
 ENV PORT=${PORT}
+
 # Instalamos sólo las dependencias necesarias
 RUN pip install flask gunicorn
 
-# Exponemos el puerto 5000 del contenedor
+# Exponemos el puerto que se pasa como argumento o por defecto el 8080 del contenedor
 EXPOSE ${PORT}
 
 # Configura el contenedor para correrlo como un ejecutable
