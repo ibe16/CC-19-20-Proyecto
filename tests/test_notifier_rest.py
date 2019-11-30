@@ -21,6 +21,7 @@ def app():
 def client(app):
     return app.test_client()
 
+# Comprobar que todas las peticiones funcionan
 def test_hello(client):
     response = client.get('/hello')
     assert b'Hello, World!' == response.data
