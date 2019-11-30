@@ -35,6 +35,32 @@ Este microservicio se ha implementado siguiendo también una arquitectura de cap
 A continuación se muestra un esquema de las capas descritas:
 ![service_layers][layer_scheme]
 
+## Microservicio Notifier
+Su función es guardar listas de correos a los que se les puede mandar una notificación. Su funcionamiento a través de API REST es el siguiente:
+**GET: /hello**
+    Muestra un 'Hello, World!'. Se usa durante el desarrollo para comprobar que el servicio responde.
+**GET: /notifier/prueba**
+    Otra prueba para el desarrollo. En este caso para comprobar que funciona el blueprint de Flask.
+**POST: /notifier/subscribe**
+    Subscribe un email a una lista. 
+    Necesita como dato un `json` de la forma:
+    ```json
+    {
+        "id_line":"<número_de_línea>",
+        "email":"<email_válido>"
+    }
+    ```
+**DELETE: /notifier/unsubscribe**
+    Borra un email de una lista.
+    Necesita como dato un `json` de la forma:
+    ```json
+    {
+        "id_line":"<número_de_línea>",
+        "email":"<email_válido>"
+    }
+    ```
+**GET: /notifier/email**
+    Devuelve un json indicando los emails que hay y las listas a las que pertenecen.
 
 ## Lenguajes y tecnologías usadas
 El proyecto se desarrolla usando Python más:
@@ -155,9 +181,10 @@ Podemos comprobar como la versión con `Alpine`es la más ligera. La versión `s
 
 1. Para construir la imagen a partir del Dockerfile ejecutamos:
     ```shell
-    $ docker build --build-arg PORT=<puerto_interno> --tag <nombre_imagen> .
+    $ docker build --build-arg PORT=<puerto_interno> --tag <nombre_imagen>:<etiqueta> .
     ```
     > Contruye la imagen en el directorio actual. Pasamos como argumento el <puerto_interno> donde se levantará `Gunicorn`. Si no se pasa ningún argumento por defecto el <puerto_interno> será el 8080.
+    > Por defecto la <etiqueta> que se coloca es `latest`.
 
 2. Para descargar la imagen desde DockerHub:
     ```shell
