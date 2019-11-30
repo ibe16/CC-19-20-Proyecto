@@ -228,4 +228,4 @@ Tras esto podemos consultar en `Heroku` el despliegue de la aplicación.
 
 [tecnologías]:https://ibe16.github.io/CC-19-20-Proyecto/docs/tecnologías/Tecnologías
 
-[layer_scheme]:(docs/arquitectura/esquema_capas.jpg)
+[layer_scheme]:docs/arquitectura/esquema_capas.jpg
