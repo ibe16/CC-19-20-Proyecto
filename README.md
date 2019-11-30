@@ -114,7 +114,7 @@ Se han configurado cuatro tareas. Estas son:
     ```shell
     $ invoke start <ip> <puerto>
     ```
-    > Levanta el microservicio usando [Gunicorn][offi_docu_guniorn], un servidor WSGI HTTP para `Python`. Si no se indica la ip y el puerto donde se quiere enlazar el servicio por defecto se establecerá `0.0.0.0:5000`
+    > Levanta el microservicio usando [Gunicorn][offi_docu_gunicorn], un servidor WSGI HTTP para `Python`. Si no se indica la ip y el puerto donde se quiere enlazar el servicio por defecto se establecerá `0.0.0.0:5000`
     > Para comprobar que se ha levantado adecuadamente se puede consultar `http:\\<ip>:<puerto>\hello`. Esto devolverá un `Hello, World!`
 
 6. Parar el microservicio
