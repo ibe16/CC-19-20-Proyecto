@@ -38,10 +38,10 @@ A continuación se muestra un esquema de las capas descritas:
 
 ## Lenguajes y tecnologías usadas
 El proyecto se desarrolla usando Python más:
-    - Flask para la interfaz REST
-    - Celery para gestionar los eventos
-    - MySQL y MongoDB como bases de datos
-    - Consul para la configuración distribuida
+- Flask para la interfaz REST
+- Celery para gestionar los eventos
+- MySQL y MongoDB como bases de datos
+- Consul para la configuración distribuida
 
 Más información sobre [lenguajes y tecnologías usadas][tecnologías].
 
@@ -169,7 +169,7 @@ Podemos comprobar como la versión con `Alpine`es la más ligera. La versión `s
     ```shell
     $ docker run --rm -p <puerto_externo>:<puerto_interno> <nombre_imagen>
     ```
-    > El <puerto_externo> indica el puerto por el que accedemos al contenedor. Para ver que el contenedor se ejecuta correctamente se puede consultar la url `http:\\0.0.0.0:<puerto_externo>/hello` que devolverá un 'Hello, World!'.
+    > El <puerto_externo> indica el puerto por el que accedemos al contenedor. Para ver que el contenedor se ejecuta correctamente se puede consultar la url `http://0.0.0:<puerto_externo>/hello` que devolverá un 'Hello, World!'.
 
 Para más información se puede consultar el [Dockerfile][enlace_dockerfile].
 
