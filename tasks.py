@@ -34,10 +34,11 @@ def coverage(ctx):
 # "notifier:create_app()" arranca el servicio. Se pasa una función porque se ha usado el patrón factoría
 # La documentación de gunicorn recomienda establecer el número de workers así (2 x $num_cores) + 1
 @task
-def start(ctx):
-    run('gunicorn -b 0.0.0.0:5000 --workers=4 --daemon -p notifier.pid "notifier:create_app()"')
+def start(ctx, ip="0.0.0.0", puerto="5000"):
+    run('gunicorn -b '+ip+':'+puerto+' --workers=4 --daemon -p notifier.pid "notifier:create_app()"')
 
 # para el proceso de gunicorn
 @task
 def stop(ctx):
     run ('kill -9 $(cat notifier.pid)')
+    run ('rm notifier.pid')

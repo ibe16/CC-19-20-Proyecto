@@ -1,3 +1,11 @@
+# Indicamos con qué queremos construir la imagen
 build:
   docker:
+    # Especificamos la ruta relativa hacia el Dockerfile
+    # En este caso Dockerfile y heroku.yml se encuentran en el mismo directorio
     web: Dockerfile
+
+# Sirve para especificar una orden que queremos que se ejecute depués de contriur el contenerdor
+# Si no se indica por defecto se usa el CMD del Dockerfile
+# run:
+#   web: <comando>
