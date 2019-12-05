@@ -37,11 +37,14 @@ A continuación se muestra un esquema de las capas descritas:
 
 ## Microservicio Notifier
 Su función es guardar listas de correos a los que se les puede mandar una notificación. Su funcionamiento a través de API REST es el siguiente:
-**GET: /hello**
+
+1. **GET: /hello**
     Muestra un 'Hello, World!'. Se usa durante el desarrollo para comprobar que el servicio responde.
-**GET: /notifier/prueba**
+    
+2. **GET: /notifier/prueba**
     Otra prueba para el desarrollo. En este caso para comprobar que funciona el blueprint de Flask.
-**POST: /notifier/subscribe**
+    
+3. **POST: /notifier/subscribe**
     Subscribe un email a una lista. 
     Necesita como dato un `json` de la forma:
     ```json
@@ -50,7 +53,8 @@ Su función es guardar listas de correos a los que se les puede mandar una notif
         "email":"<email_válido>"
     }
     ```
-**DELETE: /notifier/unsubscribe**
+    
+4. **DELETE: /notifier/unsubscribe**
     Borra un email de una lista.
     Necesita como dato un `json` de la forma:
     ```json
@@ -59,7 +63,8 @@ Su función es guardar listas de correos a los que se les puede mandar una notif
         "email":"<email_válido>"
     }
     ```
-**GET: /notifier/email**
+    
+5. **GET: /notifier/email**
     Devuelve un json indicando los emails que hay y las listas a las que pertenecen.
 
 ## Lenguajes y tecnologías usadas
