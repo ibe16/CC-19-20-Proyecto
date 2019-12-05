@@ -1,5 +1,5 @@
 # Usamos como base la iamgen de alpine con python 3.6 instalado
-FROM python:3.6-alpine
+FROM python:3.6-slim-stretch
 
 # Encaragdo de mantener el contenedor
 LABEL maintainer="Irene Béjar <irenebejar@correo.ugr.es>"

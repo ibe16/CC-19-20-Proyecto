@@ -157,14 +157,14 @@ Para más información sobre los comandos que se ejecutan y su opciones de confi
 Como herramienta de intregración continua se ha usado `TravisCI` y `Github Actions`. Para más información sobre que se realiza con ambas herramientas puede ir a la [documentación correspodiente][docu_integracion]. También puede consultar los archivos de configuración de [TravisCI][enlace_Travis] y el [workflow de Github Actions][enlace_workflow].
 
 ## Docker
-Contenedor: https://hub.docker.com/repository/docker/ibe16/notifier
+Contenedor: https://hub.docker.com/r/ibe16/notifier
 
-La imagen anterior se ha construido teniendo como base `python:3.6-alpine`, una imagen del DockerHub oficial de `Python` que usa `alpine` como sistema operativo y contiene `python 3.6` instalado. Después se han instalado las dependencias necesarias para el funcionamiento del servicio, que son `Flask` y `Gunicorn`.
+La imagen anterior se ha construido teniendo como base `python:3.6-slim-stretch`, una imagen del DockerHub oficial de `Python` que usa `Debian 9` como sistema operativo y contiene `python 3.6` instalado. Después se han instalado las dependencias necesarias para el funcionamiento del servicio, que son `Flask` y `Gunicorn`.
 
-Se ha elegido la imagen `python:3.6-alpine` siguiendo los siguientes criterios:
+Se ha elegido la imagen `python:3.6-slim-stretch` siguiendo los siguientes criterios:
 1. Proviene del repositorio oficial del lenguaje que se está usando.
 2. Contiene la versión del lenguaje con la que se está desarrollando ya instalada.
-3. Es la que menos espacio ocupa de todas las posibilidades que se barajaron. La imagen usa `Alpine` que se caracteriza por ser ligero y eficiente.
+3. Es la que mejor rendimiento ofrece en relación al espacio que ocupa. Se pueden ver en la [documentación][docu_bench] correspodiente los benchmark que se han realizado para hacer esta elección.
 
 A continuación, se muestra el resto de imagenes que se barajaron:
 ```shell
@@ -174,7 +174,7 @@ python                     3.6-slim-buster     add6920a081f        7 days ago   
 python                     latest              0a3a95c81a2b        7 days ago          932MB
 python                     3.6-alpine          8880aaf979d2        2 weeks ago         94.7MB
 ```
-Podemos comprobar como la versión con `Alpine`es la más ligera. La versión `stretch` está basada en Debian 9. La versión `buster` también está basada en Debian. Con la palabra `slim` quiere decir que es una versión reducida de estos sistemas. Si en el futuro la imagen que contiene `Alpine` diese problemas, se optaría por una de estas dos.
+Podemos comprobar como la versión con `Alpine`es la más ligera. La versión `stretch` está basada en Debian 9. La versión `buster` también está basada en Debian. Con la palabra `slim` quiere decir que es una versión reducida de estos sistemas.
 
 ### Uso
 > Para poder usar el Dockerfile es necesario instalar previamente el Docker. Se puede realizar fácilmente siguiendo su [documentación][offi_docu_docker]. También es conveniente configurarlo para usarlo sin la necesidad de hacer `sudo`.
@@ -200,7 +200,7 @@ Podemos comprobar como la versión con `Alpine`es la más ligera. La versión `s
 
 Para más información se puede consultar el [Dockerfile][enlace_dockerfile].
 
-> El repositorio de `DockerHub` se ha configurado para que se actualice la imagen cada vez que se hago un `push` al repositorio de `Github`
+> El repositorio de `DockerHub` se ha configurado para que se actualice la imagen cada vez que se haga un `push` al repositorio de `Github`. Para más información se puede consultar la [documentación][offi_docu_docker_gh] donde explica cómo realizarlo.
 
 ## Heroku
 La imagen del microservicio está desplegada en Heroku. Para comprobarlo se puede usar la url: https://cc-notifier.herokuapp.com/hello.
@@ -230,10 +230,12 @@ Para desplegarla se han seguido los siguientes pasos:
     ```
 Tras esto podemos consultar en `Heroku` el despliegue de la aplicación.
 
-> Cómo alternativa o añadido se puede vincular el repositorio de `Github` para que cuando se haga `push` automáticamente se despliegue la aplicación. 
+> Cómo añadido se ha vinculado el repositorio de `Github` para que cuando se haga `push` automáticamente se despliegue la aplicación. Para más información se puede consultar la [documentación][offi_docu_heroku_gh] donde se explica el proceso. 
 
 
 [arquitectura]:https://ibe16.github.io/CC-19-20-Proyecto/docs/arquitectura/Arquitectura
+
+[docu_bench]:https://ibe16.github.io/CC-19-20-Proyecto/docs/bench/ab
 
 [docu_integracion]:https://ibe16.github.io/CC-19-20-Proyecto/docs/ic/integracion_continua
 
@@ -252,6 +254,10 @@ Tras esto podemos consultar en `Heroku` el despliegue de la aplicación.
 [offi_docu_gunicorn]: https://gunicorn.org/
 
 [offi_docu_docker]:https://docs.docker.com/install/linux/docker-ce/ubuntu/
+
+[offi_docu_docker_gh]:https://docs.docker.com/docker-hub/builds/
+
+[offi_docu_heroku_gh]:https://devcenter.heroku.com/articles/github-integration#enabling-github-integration
 
 [tecnologías]:https://ibe16.github.io/CC-19-20-Proyecto/docs/tecnologías/Tecnologías
 
