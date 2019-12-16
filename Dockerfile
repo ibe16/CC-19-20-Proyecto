@@ -1,26 +1,35 @@
-# Usamos como base la iamgen de alpine con python 3.6 instalado
+# Usamos como base la iamgen slim-strech (debian) con python 3.6 instalado
 FROM python:3.6-slim-stretch
 
-# Encaragdo de mantener el contenedor
+# Encargado de mantener el contenedor
 LABEL maintainer="Irene Béjar <irenebejar@correo.ugr.es>"
 
-# Copiamos solo los archivos locales necesarios al contenedor
+# Copiamos solo los archivos locales necesarios para el funcionamiento del microservicio al contenedor
 COPY ./notifier/*.py /notifier/
 
 # Nos colocamos en la raíz para poder ejecutar el microservicio
 WORKDIR /
 
-# Argumento que se pasa durante la construcción. Si no se proporciona ninguno por defecto será el 8080.
+# Definimos un argumento que se puede pasar durante la construcción.
+# Así no se tiene que declarar una variable de entorno si no se quiere. 
+# Si no se proporciona ninguno por defecto será el 8080.
 ARG PORT=8080
 
-# Establecemos una variable de entorno para el contenedor
+# Establecemos las variables de entorno para el contenedor
+# Definimos el puerto
 ENV PORT=${PORT}
 
-# Instalamos sólo las dependencias necesarias
+# Instalamos sólo las dependencias necesarias, sin usar el requirements.txt
 RUN pip install flask gunicorn
 
-# Exponemos el puerto que se pasa como argumento o por defecto el 8080 del contenedor
+# Indicamos el puerto en el que se escucha el microservicio.
+# Por defecto es el (=(=))
 EXPOSE ${PORT}
 
-# Levantamo el microservicio con Gunicorn
+# Creamos un usuario sin permisos de administrador para ejecutar el servidor
+# Esto se hace por seguridad
+RUN useradd -m normaluser
+USER normaluser
+
+# Levantamos el microservicio con Gunicorn
 CMD ["sh", "-c", "gunicorn -b 0.0.0.0:${PORT} --workers=4  \"notifier:create_app()\""]
