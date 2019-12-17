@@ -21,10 +21,7 @@ Como arquitectura se ha eligido una arquitectura basada en microservicios, donde
 Más información sobre la [arquitectura][arquitectura] del todo el sistema.
 
 ### Arquitectura por capas
-Se basa en separar la funcionalidad de un servicio en varias capas, para permitir que este sea más fácil de mantener, cambiar y escalar. Las principales capas en las que se fragmentan los servicios son:
-1. Capa de presentación, corresponden a las interfaces de usuario.
-2. Capa con la lógica del negocio, que contiene los procesos que se ejecutan.
-3. La capa de datos, que gestiona la persistencia de estos.
+Se basa en separar la funcionalidad de un servicio en varias capas, para permitir que este sea más fácil de mantener, cambiar y escalar.
 
 ### Capas del microservicio Notifier
 Este microservicio se ha implementado siguiendo también una arquitectura de capas, al estilo de lo anteriormente explicado.
@@ -205,7 +202,8 @@ Podemos comprobar como la versión con `Alpine`es la más ligera. La versión `s
 
 Para más información se puede consultar el [Dockerfile][enlace_dockerfile].
 
-> El repositorio de `DockerHub` se ha configurado para que se actualice la imagen cada vez que se haga un `push` al repositorio de `Github`. Para más información se puede consultar la [documentación][offi_docu_docker_gh] donde explica cómo realizarlo.
+> El repositorio de `DockerHub` se ha configurado para que se actualice la imagen cada vez que se haga un `push` al repositorio de `Github`. Para más información se puede consultar la [documentación][docu_docker_gh] donde explica cómo realizarlo.
+
 
 ## Heroku
 La imagen del microservicio está desplegada en Heroku. Para comprobarlo se puede usar la url: https://cc-notifier.herokuapp.com/hello.
@@ -241,6 +239,8 @@ Tras esto podemos consultar en `Heroku` el despliegue de la aplicación.
 [arquitectura]:https://ibe16.github.io/CC-19-20-Proyecto/docs/arquitectura/Arquitectura
 
 [docu_bench]:https://ibe16.github.io/CC-19-20-Proyecto/docs/bench/ab
+
+[docu_docker_gh]:https://ibe16.github.io/CC-19-20-Proyecto/docs/arquitectura/despliegue_git
 
 [docu_integracion]:https://ibe16.github.io/CC-19-20-Proyecto/docs/ic/integracion_continua
 
