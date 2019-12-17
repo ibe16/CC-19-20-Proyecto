@@ -32,6 +32,17 @@ class NotificationList:
 
         except ValueError:
             raise ValueError ('El email no existe')
+
+    def subscriptions(self, email):
+        id_lines = []
+        for id, e in self.__lines.items():
+            if email in e:
+                id_lines.append(id)
+
+        if len(id_lines) == 0:
+            raise ValueError ('El email no tiene subscriociones')
+        else:
+            return id_lines
             
     def __repr__(self):
         return self.__lines.__repr__()

@@ -16,7 +16,7 @@ Con este proyecto se quiere monitorizar los downtimes de las líneas de una fáb
 - **Notifier:** Su función es notificar a una lista de contactos que se ha producido un downtime y volver a avisar cuando se restablezca la línea.
 
 ## Arquitectura
-Como arquitectura se ha eligido una arquitectura basada en microservicios, donde cada microservicio corresponde con las entidades descritas.
+Como arquitectura se ha elegido una arquitectura basada en microservicios, donde cada microservicio corresponde con las entidades descritas.
 
 Más información sobre la [arquitectura][arquitectura] del todo el sistema.
 
@@ -24,7 +24,8 @@ Más información sobre la [arquitectura][arquitectura] del todo el sistema.
 Se basa en separar la funcionalidad de un servicio en varias capas, para permitir que este sea más fácil de mantener, cambiar y escalar.
 
 ### Capas del microservicio Notifier
-Este microservicio se ha implementado siguiendo también una arquitectura de capas, al estilo de lo anteriormente explicado.
+Las capas que contiene este microservicio son:
+
 1. La capa que contiene el API REST, que configura las rutas con las que se atienden las peticiones.
 2. Una capa con la lógica de negocio que maneja los modelos y controla los procesos que se tiene que seguir.
 3. Una capa con los modelos de datos que se usan.
@@ -33,7 +34,7 @@ A continuación se muestra un esquema de las capas descritas:
 ![service_layers][layer_scheme]
 
 ## Microservicio Notifier
-Su función es guardar listas de correos a los que se les puede mandar una notificación. Su funcionamiento a través de API REST es el siguiente:
+Su función es guardar listas de correos a los que se les puede mandar una notificación. Su funcionamiento a través del API REST es el siguiente:
 
 1. **GET: /hello**
     Muestra un 'Hello, World!'. Se usa durante el desarrollo para comprobar que el servicio responde.
@@ -41,7 +42,7 @@ Su función es guardar listas de correos a los que se les puede mandar una notif
 2. **GET: /notifier/prueba**
     Otra prueba para el desarrollo. En este caso para comprobar que funciona el blueprint de Flask.
     
-3. **POST: /notifier/subscribe**
+3. **POST: /notifier/email**
     Subscribe un email a una lista. 
     Necesita como dato un `json` de la forma:
     ```json
@@ -50,8 +51,11 @@ Su función es guardar listas de correos a los que se les puede mandar una notif
         "email":"<email_válido>"
     }
     ```
+
+4. **PUT: /notifier/email**
+    Actualiza el email en una lista.
     
-4. **DELETE: /notifier/unsubscribe**
+4. **DELETE: /notifier/email**
     Borra un email de una lista.
     Necesita como dato un `json` de la forma:
     ```json
@@ -62,7 +66,13 @@ Su función es guardar listas de correos a los que se les puede mandar una notif
     ```
     
 5. **GET: /notifier/email**
-    Devuelve un json indicando los emails que hay y las listas a las que pertenecen.
+    Devuelve un json indicando las suscripciones en la que se encuentra dicho email.
+
+6. **POST: /email/all**
+    Subscribe un email a todas las líneas disponibles.
+
+7. **DELETE: /email/all**
+    Borra un email de todas las líneas.
 
 ## Lenguajes y tecnologías usadas
 El proyecto se desarrolla usando Python más:
