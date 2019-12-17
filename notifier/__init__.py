@@ -12,7 +12,7 @@ def create_app(test_config=None):
     # Configuración por defecto que usará la app como las bases de datos y la SECRET KEY
     # para mantener los datos seguros
     app.config.from_mapping(
-        # 'dev' es un valor de prueba, mientras estamos desarrllando
+        # 'dev' es un valor de prueba, mientras estamos desarrollando
          SECRET_KEY='dev',
         # DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
     )

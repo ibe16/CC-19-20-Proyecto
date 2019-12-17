@@ -67,12 +67,7 @@ Su función es guardar listas de correos a los que se les puede mandar una notif
     
 5. **GET: /notifier/email**
     Devuelve un json indicando las suscripciones en la que se encuentra dicho email.
-
-6. **POST: /email/all**
-    Subscribe un email a todas las líneas disponibles.
-
-7. **DELETE: /email/all**
-    Borra un email de todas las líneas.
+    
 
 ## Lenguajes y tecnologías usadas
 El proyecto se desarrolla usando Python más:

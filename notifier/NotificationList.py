@@ -40,7 +40,7 @@ class NotificationList:
                 id_lines.append(id)
 
         if len(id_lines) == 0:
-            raise ValueError ('El email no tiene subscriociones')
+            raise ValueError ('El email no tiene subscripciones')
         else:
             return id_lines
             

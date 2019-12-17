@@ -29,3 +29,9 @@ def test_unsubscribe(notification_list):
         notification_list.unsubscribe(1, 'test.email')
     with pytest.raises(KeyError, match='La línea no existe'):
         notification_list.unsubscribe(4, 'test@email.com')
+
+def test_subscriptions(notification_list):
+    list = notification_list.subscriptions('irene@email.com')
+    assert list == [1, 2]
+    with pytest.raises(ValueError, match='El email no tiene subscripciones'):
+        notification_list.subscriptions('test@correo.com')
