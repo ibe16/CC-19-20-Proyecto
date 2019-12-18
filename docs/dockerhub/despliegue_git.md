@@ -19,7 +19,7 @@ Después, tenemos que rellenar la información que nos pide:
 
 ![imagen][info_github]
 
-Para comprobar que la `build` tiene exito, solo tenemos que hacer `push`en nuestro repositorio de `Github` y comprobar el estado de esta:
+Para comprobar que la `build` tiene exito, solo tenemos que hacer `push` en nuestro repositorio de `Github` y comprobar el estado de esta:
 
 ![imagen][estado_build]
 

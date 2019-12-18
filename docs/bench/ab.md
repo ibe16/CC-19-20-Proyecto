@@ -122,4 +122,4 @@ El resultado es el siguiente:
 - La peticióm más lenta se ha completado en 7701 ms
 
 ### Conclusiones
-La imagen que ofrece mejor compromiso entre rendimiento y espacio es la `sim-strech` y por tanto será la que se usé. Es la más rápida procesadon peticiones y solo ocupa 151MB.
+La imagen que ofrece mejor compromiso entre rendimiento y espacio es la `sim-strech` y por tanto será la que se use. Es la más rápida procesando peticiones y solo ocupa 151MB.
