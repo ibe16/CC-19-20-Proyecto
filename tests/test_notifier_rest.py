@@ -8,6 +8,7 @@ from notifier.db import get_db
 from notifier.db import init_db
 
 
+
 # Tearup de la aplicación, se usará en cada test
 @pytest.fixture(scope='session')
 def app():

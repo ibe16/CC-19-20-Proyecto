@@ -21,8 +21,8 @@ def subscribe():
         return jsonify({'message': 'JSON not found'})
 
     for key, value in data.items():
-            if not value:
-                return jsonify({'message': 'value for {} is empty'.format(key)})
+        if not value:
+            return jsonify({'message': 'value for {} is empty'.format(key)})
 
     id_line = data['id_line']
     email = data['email']
