@@ -79,6 +79,8 @@ def email():
 
     try:
         lines=db.subscriptions(email)
+        print("lo que devuelve db.subscriptions")
+        print(lines)
         return jsonify(id_lines=lines)
     except ValueError:
         return jsonify({'message': 'not subscriptions for email {}'.format(email)})

@@ -32,7 +32,7 @@ def test_subscribe(client):
     response = client.post("/notifier/email", 
                 data=json.dumps({ "id_line":"1","email":"irene@email.com"}), 
                 content_type='application/json')
-    assert b'"message": "Email was subscribed succesfully"' in response.data
+    assert {'message': 'Email was subscribed succesfully'} == json.loads(response.data.decode("utf-8"))
 
     # Comprobar que cuando falta algún elemento del JSON devuelve el mensaje correcto
     response = client.post("/notifier/email", 
@@ -43,7 +43,7 @@ def test_subscribe(client):
     # Comprobar que cuando no se recibe nada se devuelve el mensaje correcto
     response = client.post("/notifier/email", 
                 data="")
-    assert b'JSON not found' in response.data
+    assert {'message': 'JSON not found'} == json.loads(response.data.decode("utf-8"))
 
     # Comprobar que cuando se recibe un JSON vacío se devuelve el mensaje correcto
     response = client.post("/notifier/email", 
@@ -58,7 +58,10 @@ def test_email(client):
                 data=json.dumps({ "email":"irene@email.com"}),
                 content_type='application/json')
     print(response.data)
-    assert b'{\n  "id_lines": [\n    "1"\n  ]\n}\n' in response.data
+    # decode("utf-8") pasa la respuesta de bytes a string
+    # Luego lo cargamos en un diccionario
+    # Comparamos dos diccionarios
+    assert {"id_lines": ["1"]} == json.loads(response.data.decode("utf-8"))
 
     # Comprobar que cuando falta algún elemento del JSON devuelve el mensaje correcto
     response = client.get('/notifier/email',
@@ -71,14 +74,14 @@ def test_email(client):
     response = client.get('/notifier/email',
                 data="")
     print(response.data)
-    assert b'JSON not found' in response.data
+    assert {'message': 'JSON not found'} == json.loads(response.data.decode("utf-8"))
 
     # Comprobar que cuando se recibe un JSON vacío se devuelve el mensaje correcto
     response = client.get('/notifier/email',
                 data=json.dumps({}),
                 content_type='application/json')
     print(response.data)
-    assert b'JSON not found' in response.data
+    assert {'message': 'JSON not found'} == json.loads(response.data.decode("utf-8"))
 
 # Testea DELETE: /notifier/email
 def test_unsubcsribe(client):
@@ -86,7 +89,7 @@ def test_unsubcsribe(client):
     response = client.delete("/notifier/email", 
                 data=json.dumps({ "id_line":"1","email":"irene@email.com"}), 
                 content_type='application/json')
-    assert b'"message": "Email was deleted "' in response.data
+    assert {'message': 'Email was deleted '} == json.loads(response.data.decode("utf-8"))
 
     # Comprobar que cuando falta algún elemento del JSON devuelve el mensaje correcto
     response = client.delete("/notifier/email", 
@@ -97,13 +100,13 @@ def test_unsubcsribe(client):
     # Comprobar que cuando no se recibe nada se devuelve el mensaje correcto
     response = client.delete("/notifier/email", 
                 data="")
-    assert b'JSON not found' in response.data
+    assert {'message': 'JSON not found'} == json.loads(response.data.decode("utf-8"))
 
     # Comprobar que cuando se recibe un JSON vacío se devuelve el mensaje correcto
     response = client.delete("/notifier/email", 
                 data=json.dumps({}), 
                 content_type='application/json')
-    assert b'JSON not found' in response.data    
+    assert {'message': 'JSON not found'} == json.loads(response.data.decode("utf-8"))  
 
 # Testea PUT: /notifier/email
 def test_update(client):
@@ -116,7 +119,7 @@ def test_update(client):
     response = client.put("/notifier/email", 
                 data=json.dumps({ "id_line":"1", "old_email":"irene@email.com", "new_email":"test@correo.com"}), 
                 content_type='application/json')
-    assert b'"message": "Email was updated succesfully"' in response.data
+    assert {'message': 'Email was updated succesfully'} == json.loads(response.data.decode("utf-8"))
 
     # Comprobar que cuando falta algún elemento del JSON devuelve el mensaje correcto
     response = client.put("/notifier/email", 
@@ -127,11 +130,11 @@ def test_update(client):
     # Comprobar que cuando no se recibe nada se devuelve el mensaje correcto
     response = client.put("/notifier/email", 
                 data="")
-    assert b'JSON not found' in response.data
+    assert {'message': 'JSON not found'} == json.loads(response.data.decode("utf-8"))
 
     # Comprobar que cuando se recibe un JSON vacío se devuelve el mensaje correcto
     response = client.put("/notifier/email", 
                 data=json.dumps({}), 
                 content_type='application/json')
-    assert b'JSON not found' in response.data   
+    assert {'message': 'JSON not found'} == json.loads(response.data.decode("utf-8"))   
 
