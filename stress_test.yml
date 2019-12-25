@@ -1,0 +1,59 @@
+execution:
+    - executor: jmeter
+      concurrency: 1
+      ramp-up: 10s
+      hold-for: 50s
+      scenario: notifier
+    
+scenarios:
+    notifier:
+        data-sources:
+        - data.csv
+
+        requests:
+        - url: http://0.0.0.0:5000/notifier/email
+          method: GET
+          label: get-email
+          assert:
+          - contains:
+            - 200|404
+            subject: http-code
+            regexp: true
+          headers: 
+            Content-Type: application/json
+          body:
+            email: ${id}
+
+        - url: http://0.0.0.0:5000/notifier/email
+          method: POST
+          label: post-email
+          assert:
+          - contains:
+            - 200|403
+            subject: http-code
+            regexp: true
+          headers:
+            Content-Type: application/json
+          body: 
+            id_line: ${id}
+            email: ${id}@email.com
+
+        - url: http://0.0.0.0:5000/notifier/email
+          method: DELETE
+          label: delete-email
+          assert:
+          - contains:
+            - 200
+            subject: http-code
+          headers:
+            Content-Type: application/json
+          body: 
+            id_line: ${id}
+            email: ${id}@email.com
+        
+
+
+  
+          
+
+

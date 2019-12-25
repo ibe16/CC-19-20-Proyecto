@@ -3,4 +3,6 @@ pytest-cov
 codecov
 invoke
 Flask
+pymongo
 gunicorn
+bzt
