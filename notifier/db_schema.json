@@ -1,0 +1,21 @@
+{
+    "bsonType": "object",
+    "required": ["id_line"],
+    "properties": {
+        "_id":{ },
+        "id_line": {
+            "bsonType" : "string",
+            "description" : "El ID de una línea debe ser un String"
+        },
+        "emails": {
+            "bsonType" : ["array"],
+            "minItems" : 1,
+            "uniqueItems" : true,
+            "additionalProperties" : false,
+            "items" : {
+                "bsonTypes" : "string",
+                "description" : "Los 'emails' deben ser un string"
+            }
+        }
+    }
+}

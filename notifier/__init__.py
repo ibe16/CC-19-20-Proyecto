@@ -15,6 +15,8 @@ def create_app(test_config=None):
         # 'dev' es un valor de prueba, mientras estamos desarrollando
          SECRET_KEY='dev',
         # DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+        MONGO_DBNAME = 'prueba',
+        MONGO_URI = 'mongodb://localhost:27017/'
     )
 
     if test_config is None:
