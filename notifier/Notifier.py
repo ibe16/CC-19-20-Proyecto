@@ -42,8 +42,8 @@ class Notifier:
             raise ValueError("Argumentos inválidos")
 
     def notification(self, id_line):
-        result = self.__db.read_line('1')
-        print (result)
+        result = self.__db.read_line(id_line)
+        #print (result)
         if result != [ ] :
             send_emails.delay(id_line, result)
 

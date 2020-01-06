@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 
+import os
+
 from pymodm import connect
 from pymodm import MongoModel, fields
 
 import json
 import re
 from collections import OrderedDict
-
-connect('mongodb://localhost:27017/notifier', alias='notifier')
+os.environ['SECRET_KEY']
+connect(os.environ['MONGO_URI'], alias='notifier')
 
 class NotificationList_model(MongoModel):
     id_line=fields.CharField(primary_key=True)

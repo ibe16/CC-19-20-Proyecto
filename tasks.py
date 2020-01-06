@@ -35,7 +35,7 @@ def coverage(ctx):
 # La documentación de gunicorn recomienda establecer el número de workers así (2 x $num_cores) + 1
 @task
 def start(ctx, ip="0.0.0.0", puerto="5000"):
-    run('gunicorn -b '+ip+':'+puerto+' --workers=10 --daemon -p notifier.pid "notifier:create_app()"')
+    run('gunicorn -b '+ip+':'+puerto+' --workers=5 -p notifier.pid "notifier:create_app()"')
 
 # para el proceso de gunicorn
 @task

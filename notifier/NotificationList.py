@@ -7,9 +7,17 @@ class NotificationList:
     def read_email(self, email):
         results=list(NotificationList_model.objects.raw({'email': email}))
 
-        print(results)
+        #print(results)
         return results
+
+    def read_line(self, id_line):
+        try:
+            results=NotificationList_model.objects.values().get({'_id': id_line})
+            results=results['email']
+        except:
+            results=[ ]
         
+        return results
 
     def create(self, id_line, email):
         n = NotificationList_model(id_line, email)
@@ -23,7 +31,6 @@ class NotificationList:
         NotificationList_model.objects.raw({'_id' : id_line}).update({'$pull':{'email':email}})
 
     def update(self, id_line, old_email, new_email):
-        
         if self.read_email(new_email) == [] and self.read_email(old_email) != []:
             self.delete(id_line, old_email)
             self.create(id_line, new_email)
@@ -33,8 +40,8 @@ class NotificationList:
 
 
 
-if __name__ == "__main__":
-    NotificationList().delete("1", "uno@email.com")
-#     # NotificationList().update("1", "irene@email.com", "bejar@email.com")
-#     # NotificationList().create("2", "bejar@email.com")
-      #  NotificationList().read_email("irene@email.com")
+# if __name__ == "__main__":
+#     NotificationList().delete("1", "uno@email.com")
+# #     # NotificationList().update("1", "irene@email.com", "bejar@email.com")
+# #     # NotificationList().create("2", "bejar@email.com")
+#       #  NotificationList().read_email("irene@email.com")

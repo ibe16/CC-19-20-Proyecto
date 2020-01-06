@@ -1,6 +1,10 @@
 #Lenguaje de programación
 language: python
 
+#Indicamos que vamos a usar MongoDB
+services:
+  - mongodb
+
 #Distintas versiones para hacer la prueba
 python:
   - "3.4"

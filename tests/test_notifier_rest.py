@@ -4,8 +4,8 @@ import json
 import sys
 sys.path.append('notifier')
 import notifier
-from notifier.db import get_db
-from notifier.db import init_db
+from notifier.db import get_notifier
+from notifier.db import init_notifier
 
 
 
@@ -15,7 +15,7 @@ def app():
     app = notifier.create_app({'TESTING': True})
 
     with app.app_context():
-        init_db()
+        init_notifier()
     yield app
 
 @pytest.fixture(scope='session')

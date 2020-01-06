@@ -1,7 +1,12 @@
+# coding=utf-8
+
 import os
 
 from flask import Flask
+from celery import Celery
 
+
+from celery import Celery
 
 def create_app(test_config=None):
     # Creación y configuración de la app
@@ -12,11 +17,7 @@ def create_app(test_config=None):
     # Configuración por defecto que usará la app como las bases de datos y la SECRET KEY
     # para mantener los datos seguros
     app.config.from_mapping(
-        # 'dev' es un valor de prueba, mientras estamos desarrollando
-         SECRET_KEY='dev',
-        # DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
-        MONGO_DBNAME = 'prueba',
-        MONGO_URI = 'mongodb://localhost:27017/'
+        SECRET_KEY=os.environ['SECRET_KEY']
     )
 
     if test_config is None:
@@ -27,12 +28,7 @@ def create_app(test_config=None):
         # Carga la configuración que pasemos
         app.config.from_mapping(test_config)
 
-    # Se asegura de crear la carpeta de la instancia, necesaria para la base de datos
-    # Por ahora no hace falta
-    # try:
-    #     os.makedirs(app.instance_path)
-    # except OSError:
-    #     pass
+
 
     # Inicializamos la base de datos
     from notifier import db

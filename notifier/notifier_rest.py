@@ -86,8 +86,6 @@ def email():
 
     try:
         lines=notifier.subscriptions(email)
-        print("lo que devuelve notifier.subscriptions")
-        print(lines)
         return jsonify(lines), 200
     except ValueError:
         return jsonify({'message': 'not subscriptions for email {}'.format(email)}), 404
@@ -114,5 +112,5 @@ def unsubscribe():
     email = data['email']
     
     notifier.unsubscribe(id_line, email)
-    print (notifier)
+    #print (notifier)
     return jsonify({'message': 'Email was deleted '}), 200
