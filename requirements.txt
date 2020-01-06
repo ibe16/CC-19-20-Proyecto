@@ -4,5 +4,7 @@ codecov
 invoke
 Flask
 pymongo
+pymodm
+Celery
 gunicorn
 bzt
