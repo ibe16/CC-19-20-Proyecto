@@ -2,6 +2,7 @@ import os
 import sys
 sys.path.append('notifier')
 import NotificationList
+from notifier_celery import send_emails
 import json
 
 
@@ -40,6 +41,12 @@ class Notifier:
         except ValueError:
             raise ValueError("Argumentos inválidos")
 
+    def notification(self, id_line):
+        result = self.__db.read_line('1')
+        print (result)
+        if result != [ ] :
+            send_emails.delay(id_line, result)
+
             
     # def __repr__(self):
     #     return self.__lines.__repr__()
@@ -52,12 +59,15 @@ class Notifier:
 
 
 # if __name__ == "__main__":
-#     # d = NotificationList.NotificationList()
-#     # n = Notifier(d)
+#     d = NotificationList.NotificationList()
+#     n = Notifier(d)
 
-#     # print(n.subscriptions('bejar@email.com'))
+#     #n.subscribe('1', 'irenebejar@correo.ugr.es')
+#     n.notification('1')
 
-#     f = open("data.csv", 'w')
-#     f.write("id")
-#     for i in range(1000000):
-#         f.write("%d\n" % (i))
+# #     # print(n.subscriptions('bejar@email.com'))
+
+# #     f = open("data.csv", 'w')
+# #     f.write("id")
+# #     for i in range(1000000):
+# #         f.write("%d\n" % (i))
