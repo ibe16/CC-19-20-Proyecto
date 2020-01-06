@@ -25,7 +25,7 @@ def test(ctx):
 #ejecuta los test de cobertura
 @task 
 def coverage(ctx):
-    run ('python3 -m pytest  --cov-report term --cov=notifier tests/')
+    run ('python3 -m pytest --cov-report term --cov=notifier tests/')
 
 # -b para indicar la ip y el puerto por el que acceder al servicio
 # --workers es el número de procesos de se despliegan

@@ -21,7 +21,6 @@ install:
 
 #Ejecutar los test unitarios y de cobertura
 script:
-  - invoke test
   - invoke coverage
 
 #Enviar resultados test de cobertura a codecov
