@@ -1,10 +1,11 @@
 import pytest
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 import sys
 sys.path.append('notifier')
 import Notifier
 import NotificationList_model
+
 
 @pytest.fixture(scope='session')
 def db():
@@ -49,8 +50,8 @@ def test_update(notifier, db):
 def test_notification(notifier, db):
     result1 = ['test1@email.com', 'test2@email.com']
     result2 = [ ]
-
-    db.read_line.return_value = result1
+    
+    db.read_line.return_value = result2
     notifier.notification('1')
     db.read_line.assert_called_with('1')
     
