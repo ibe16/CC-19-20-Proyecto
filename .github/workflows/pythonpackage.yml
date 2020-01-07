@@ -25,10 +25,6 @@ jobs:
         python -m pip install --upgrade pip 
         pip install -r requirements.txt 
         
-    - name: Setup de los secrets
-      env: # Or as an environment variable
-        super_secret: ${{ secrets.SuperSecret }}
-        
     - name: Start MongoDB As Docker
       uses: wbari/start-mongoDB@v0.2
       with:
@@ -38,10 +34,19 @@ jobs:
     - name: Testar con pytest #Instalamos Pytest y pasamos los test unitarios
       run: |
         invoke test
+      env: # Or as an environment variable
+        FLASK_APP: ${{ secrets.FLASK_APP }}
+        FLASK_ENV:  ${{ secrets.FLASK_ENV }}
+        PORT: ${{ secrets.PORT }}
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        CELERY_BROKER: ${{ secrets.CELERY_BROKER }}
+        CELERY_BACKEND: ${{ secrets.CELERY_BACKEND }}
+        MONGO_URI: ${{ secrets.MONGO_URI }}
+        CORREO: ${{ secrets.CORREO }}
+        PASSWORD: ${{ secrets.PASSWORD }}
+        SMTP_PORT: ${{ secrets.SECRET_PORT }}
+        SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
     
-    - name: Testear con pytest-cov
-      run: |
-        invoke coverage
     
 #    - name: Enviar resultados a Codecov #Envía los resultados del test de cobertura a Codecov para su visualización
 #      run: |
