@@ -22,6 +22,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip 
         pip install -r requirements.txt 
+        
+    - name: Start MongoDB As Docker
+      uses: wbari/start-mongoDB@v0.2
+      with:
+        # MongoDB Version
+        mongoDBVersion: 4.2.2 
 
     - name: Testar con pytest #Instalamos Pytest y pasamos los test unitarios
       run: |
