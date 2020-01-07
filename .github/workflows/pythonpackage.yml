@@ -34,7 +34,7 @@ jobs:
       
     - name: Testar con pytest #Instalamos Pytest y pasamos los test unitarios
       run: |
-        echo $FLASK_APP $FLASK_ENV $PORT $CELERY_BROKER $CELERY_BACKEND $MONGO_URI
+        python3 -m pytest -v
       env: # Or as an environment variable
         FLASK_APP: ${{ secrets.FLASK_APP }}
         FLASK_ENV:  ${{ secrets.FLASK_ENV }}
