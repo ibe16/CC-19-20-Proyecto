@@ -30,9 +30,12 @@ jobs:
       with:
         # MongoDB Version
         mongoDBVersion: 4.2
-    - name: set-env
-      uses: allenevans/set-env@v1.0.0
-      with:
+
+      
+    - name: Testar con pytest #Instalamos Pytest y pasamos los test unitarios
+      run: |
+        echo $FLASK_APP $FLASK_ENV $PORT $CELERY_BROKER $CELERY_BACKEND $MONGO_URI
+      env: # Or as an environment variable
         FLASK_APP: ${{ secrets.FLASK_APP }}
         FLASK_ENV:  ${{ secrets.FLASK_ENV }}
         PORT: ${{ secrets.PORT }}
@@ -44,22 +47,6 @@ jobs:
         PASSWORD: ${{ secrets.PASSWORD }}
         SMTP_PORT: ${{ secrets.SMTP_PORT }}
         SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
-      
-    - name: Testar con pytest #Instalamos Pytest y pasamos los test unitarios
-      run: |
-        invoke test
-      #with: # Or as an environment variable
-       # FLASK_APP: ${{ secrets.FLASK_APP }}
-        #FLASK_ENV:  ${{ secrets.FLASK_ENV }}
-        #PORT: ${{ secrets.PORT }}
-#        SECRET_KEY: ${{ secrets.SECRET_KEY }}
-#       CELERY_BROKER: ${{ secrets.CELERY_BROKER }}
-#       CELERY_BACKEND: ${{ secrets.CELERY_BACKEND }}
-#       MONGO_URI: ${{ secrets.MONGO_URI }}
-#       CORREO: ${{ secrets.CORREO }}
-#       PASSWORD: ${{ secrets.PASSWORD }}
-#       SMTP_PORT: ${{ secrets.SMTP_PORT }}
-#       SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
       
     
 #    - name: Enviar resultados a Codecov #Envía los resultados del test de cobertura a Codecov para su visualización
