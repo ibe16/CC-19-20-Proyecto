@@ -40,7 +40,7 @@ jobs:
         FLASK_ENV:  ${{ secrets.FLASK_ENV }}
         PORT: ${{ secrets.PORT }}
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        CELERY_BROKER: ${{ secrets.CELERY_BROKER }}
+        CELERY_BROKER_URL: ${{ secrets.CELERY_BROKER }}
         CELERY_BACKEND: ${{ secrets.CELERY_BACKEND }}
         MONGO_URI: ${{ secrets.MONGO_URI }}
         CORREO: ${{ secrets.CORREO }}
