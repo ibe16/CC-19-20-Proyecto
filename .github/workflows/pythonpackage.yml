@@ -44,9 +44,9 @@ jobs:
         MONGO_URI: ${{ secrets.MONGO_URI }}
         CORREO: ${{ secrets.CORREO }}
         PASSWORD: ${{ secrets.PASSWORD }}
-        SMTP_PORT: ${{ secrets.SECRET_PORT }}
+        SMTP_PORT: ${{ secrets.SMTP_PORT }}
         SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
-    
+      
     
 #    - name: Enviar resultados a Codecov #Envía los resultados del test de cobertura a Codecov para su visualización
 #      run: |
