@@ -7,7 +7,6 @@ services:
 
 #Distintas versiones para hacer la prueba
 python:
-  - "3.4"
   - "3.5"
   - "3.6"
   - "3.6.8" 
