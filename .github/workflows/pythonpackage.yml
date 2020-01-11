@@ -14,22 +14,40 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1 #Acción para levantar Python
       with:
         python-version: ${{ matrix.python-version }}
+    
     - name: Instalar dependecias  #Instalamos pip y después instalamos las dependencias
       run: |
         python -m pip install --upgrade pip 
         pip install -r requirements.txt 
+        
+    - name: Start MongoDB As Docker
+      uses: wbari/start-mongoDB@v0.2
+      with:
+        # MongoDB Version
+        mongoDBVersion: 4.2
 
+      
     - name: Testar con pytest #Instalamos Pytest y pasamos los test unitarios
       run: |
-        invoke test
-    
-    - name: Testear con pytest-cov
-      run: |
-        invoke coverage
+        python3 -m pytest -v
+      env: # Or as an environment variable
+        FLASK_APP: ${{ secrets.FLASK_APP }}
+        FLASK_ENV:  ${{ secrets.FLASK_ENV }}
+        PORT: ${{ secrets.PORT }}
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        CELERY_BROKER_URL: ${{ secrets.CELERY_BROKER }}
+        CELERY_BACKEND: ${{ secrets.CELERY_BACKEND }}
+        MONGO_URI: ${{ secrets.MONGO_URI }}
+        CORREO: ${{ secrets.CORREO }}
+        PASSWORD: ${{ secrets.PASSWORD }}
+        SMTP_PORT: ${{ secrets.SMTP_PORT }}
+        SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+      
     
 #    - name: Enviar resultados a Codecov #Envía los resultados del test de cobertura a Codecov para su visualización
 #      run: |
