@@ -1,4 +1,5 @@
 # coding=utf-8
+import os
 
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -7,7 +8,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, String, Integer, DateTime
 
 
-engine = create_engine('postgres+psycopg2://postgres:1997bm@localhost/monitor')
+uri = os.environ['POSTGRES_URI']
+engine = create_engine(uri)
 Session = sessionmaker(bind=engine)
 
 Base = declarative_base()
