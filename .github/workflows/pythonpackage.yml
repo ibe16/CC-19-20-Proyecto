@@ -34,6 +34,16 @@ jobs:
         # MongoDB Version
         mongoDBVersion: 4.2
 
+    - name: Setup PostgreSQL
+      uses: Harmon758/postgresql-action@v1.0.0
+      with:
+        # POSTGRES_DB - name for the default database that is created
+        postgresql db: ${{ secrets.POSTGRES_DB }}
+        # POSTGRES_USER - create the specified user with superuser power
+        postgresql user: ${{ secrets.POSTGRES_USER }}
+        # POSTGRES_PASSWORD - superuser password
+        postgresql password: ${{ secrets.POSTGRES_PASSWORD }}
+
       
     - name: Testar con pytest #Instalamos Pytest y pasamos los test unitarios
       run: |
@@ -50,6 +60,7 @@ jobs:
         PASSWORD: ${{ secrets.PASSWORD }}
         SMTP_PORT: ${{ secrets.SMTP_PORT }}
         SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+        POSTGRES_HOST: postgres
       
     
 #    - name: Enviar resultados a Codecov #Envía los resultados del test de cobertura a Codecov para su visualización
