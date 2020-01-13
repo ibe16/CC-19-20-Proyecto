@@ -61,6 +61,9 @@ jobs:
         SMTP_PORT: ${{ secrets.SMTP_PORT }}
         SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
         POSTGRES_HOST: postgres
+        POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+        POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       
     
 #    - name: Enviar resultados a Codecov #Envía los resultados del test de cobertura a Codecov para su visualización
