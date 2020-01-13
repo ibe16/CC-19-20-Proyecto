@@ -43,7 +43,6 @@ class Notifier:
 
     def notification(self, id_line):
         result = self.__db.read_line(id_line)
-        #print (result)
         if result != [ ] :
             send_emails.delay(id_line, result)
 

@@ -8,3 +8,6 @@ pymodm
 Celery
 gunicorn
 bzt
+requests
+sqlalchemy
+psycopg2
