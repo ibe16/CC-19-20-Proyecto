@@ -37,6 +37,7 @@ jobs:
     - name: Setup PostgreSQL
       uses: Harmon758/postgresql-action@v1.0.0
       with:
+        postgressql version: '11'
         # POSTGRES_DB - name for the default database that is created
         postgresql db: ${{ secrets.POSTGRES_DB }}
         # POSTGRES_USER - create the specified user with superuser power
