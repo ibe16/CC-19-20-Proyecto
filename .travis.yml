@@ -1,9 +1,10 @@
 #Lenguaje de programación
 language: python
 
-#Indicamos que vamos a usar MongoDB
+#Indicamos que vamos a usar MongoDB y PostgreSQL
 services:
   - mongodb
+  - postgresql
 
 #Distintas versiones para hacer la prueba
 python:
@@ -17,6 +18,10 @@ python:
 #Instalar las dependencias necesarias
 install:
   - pip install -r requirements.txt
+
+before_script:
+  - psql -c 'create database monitor;' -U postgres
+  - psql -c "ALTER USER postgres PASSWORD '$PASSWORD';" -U postgres
 
 #Ejecutar los test unitarios y de cobertura
 script:

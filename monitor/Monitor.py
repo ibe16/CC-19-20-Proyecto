@@ -59,9 +59,9 @@ class Monitor:
         id = self.__db.start_downtime(service_name, datetime.now())
         return id
 
-    def end_downtime(self, id, service_name):
+    def end_downtime(self, id):
         try:
-            id = self.__db.end_downtime(id, service_name, datetime.now())
+            id = self.__db.end_downtime(id, datetime.now())
             return id
         except ValueError:
             raise ValueError ("El id no existe")

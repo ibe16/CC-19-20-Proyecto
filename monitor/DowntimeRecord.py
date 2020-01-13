@@ -34,7 +34,10 @@ class DowntimeRecord:
         if downtime is not None:
             result['service']= downtime.service
             result['date_start']= downtime.date_start.strftime("%d/%m/%Y, %H:%M:%S")
-            result['date_end']=downtime.date_end.strftime("%d/%m/%Y, %H:%M:%S")
+            if downtime.date_end is None:
+                result['date_end'] = " "
+            else:
+                result['date_end']=downtime.date_end.strftime("%d/%m/%Y, %H:%M:%S")
         print(result)
         return result
 
@@ -47,8 +50,8 @@ class DowntimeRecord:
         print(downtime)
         return downtime.id 
 
-    def end_downtime(self, id, service, date_end):
-        if self.get_downtime(id) is not {}:
+    def end_downtime(self, id, date_end):
+        if self.get_downtime(id):
             downtime = session.query(DowntimeRecordModel).get(id)
             downtime.date_end = date_end
             session.add(downtime)
@@ -77,6 +80,6 @@ if __name__ == "__main__":
     #id = d.start_downtime("GitHub Actions", datetime.now())
     #print(id)
     #d.end_downtime(id, 'GitHub Actions', datetime.now())
-    d.delete_downtime(1)
+    #d.delete_downtime(1)
     #d.get_downtime_record('GitHub Actions')
     #d.get_downtime(1)

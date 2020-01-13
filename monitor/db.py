@@ -23,14 +23,14 @@ def get_monitor():
     return g.monitor
 
 
-def init_notifier():
+def init_monitor():
     monitor = get_monitor()
 
 
 @click.command('init-db')
 @with_appcontext
 def init_db_command():
-    init_notifier()
+    init_monitor()
     click.echo('Initialized the database.')
 
 def init_app(app):
