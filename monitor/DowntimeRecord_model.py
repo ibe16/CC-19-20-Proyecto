@@ -7,8 +7,11 @@ from sqlalchemy.orm import sessionmaker
 
 from sqlalchemy import Column, String, Integer, DateTime
 
-
-uri = os.environ['POSTGRES_URI']
+user = os.environ['POSTGRES_USER']
+password = os.environ['POSTGRES_PASSWORD']
+host = os.environ['POSTGRES_HOST']
+db = os.environ['POSTGRES_DB']
+uri = 'postgres+psycopg2://'+user+':'+password+'@'+host+'/'+db
 engine = create_engine(uri)
 Session = sessionmaker(bind=engine)
 
