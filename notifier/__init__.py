@@ -22,7 +22,7 @@ def create_app(test_config=None):
 
     if test_config is None:
         # Carga la configuración con valores cogidos del archivo 'config.py'
-        # Aquí por ejemplo se guarda la SECRET_KEY
+        # Aquí por ejemplo se guarda la SECRET_KEY para testing
         app.config.from_pyfile('config.py', silent=True)
     else:
         # Carga la configuración que pasemos
