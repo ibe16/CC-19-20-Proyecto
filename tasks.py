@@ -46,6 +46,8 @@ def startmonitor(ctx, ip="0.0.0.0", puerto="5051"):
 def start(ctx, ip="0.0.0.0", puerto1="5000", puerto2="5051"):
     run('gunicorn -b '+ip+':'+puerto1+' --workers=9 --worker-class eventlet --daemon -p notifier.pid "notifier:create_app()"')
     run('gunicorn -b '+ip+':'+puerto2+' --workers=9 --worker-class eventlet --daemon -p monitor.pid "monitor:create_app()"')
+    run ('celery -A notifier.notifier_celery worker --detach')
+    run ('celery -A monitor.monitor_celery worker --beat --detach')
 
 # para el proceso de gunicorn
 @task
@@ -54,3 +56,5 @@ def stop(ctx):
     run ('rm notifier.pid')
     run ('kill -9 $(cat monitor.pid)')
     run ('rm monitor.pid')
+    run ('kill -9 $(cat celeryd.pid)')
+    run ('rm celeryd.pid')

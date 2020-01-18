@@ -1,4 +1,6 @@
 import os
+import sys
+sys.path.append('monitor')
 
 from celery import Celery
 import smtplib, ssl
@@ -7,7 +9,7 @@ import smtplib, ssl
 broker = os.environ['CELERY_BROKER_URL']
 
 # Creamos la APP
-app = Celery('notifier_rest', broker=broker)
+app = Celery('notifier_rest', broker=broker, include=['monitor.monitor_celery'])
 
 # Datos para conectamos al servidor con el que vamos a mandar correos
 port = os.environ['SMTP_PORT']

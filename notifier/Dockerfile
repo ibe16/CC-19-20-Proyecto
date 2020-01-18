@@ -42,4 +42,3 @@ USER normaluser
 
 # Levantamos el microservicio con Gunicorn
 CMD ["sh", "-c", "gunicorn -b 0.0.0.0:${PORT_NOTIFIER} --workers=4 \"notifier:create_app()\""]
-#CMD celery -A notifier.notifier_celery worker -Q notifier

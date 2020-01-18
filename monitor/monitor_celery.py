@@ -9,11 +9,13 @@ from monitor import Monitor
 # Para poder usar la función que envía los correos
 sys.path.append('notifier')
 from notifier import Notifier
+from notifier import NotificationList
 
 # Indicamos el broker que vamos a usar para Celery
 broker = os.environ['CELERY_BROKER_URL']
 monitor = Monitor.Monitor()
-notifier = Notifier.Notifier()
+n = NotificationList.NotificationList()
+notifier = Notifier.Notifier(n)
 
 # Estado del servicio que no es downtime
 OK = 'operational'
