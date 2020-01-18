@@ -111,15 +111,15 @@ Su función es guardar listas de correos a los que se les puede mandar una notif
    Devuelve un json con el estado de los servicios
    ```json
    {
-      'Git Operations': 'operational', 
-      'API Requests': 'operational', 
-      'Webhooks': 'operational', 
-      'Visit www.githubstatus.com for more information': 'operational', 
-      'Issues, PRs, Projects': 'operational', 
-      'GitHub Actions': 'degraded_performance', 
-      'GitHub Packages': 'operational', 
-      'GitHub Pages': 'operational', 
-      'Other': 'operational'
+      "Git Operations": "operational", 
+      "API Requests": "operational", 
+      "Webhooks": "operational", 
+      "Visit www.githubstatus.com for more information": "operational", 
+      "Issues, PRs, Projects": "operational", 
+      "GitHub Actions": "degraded_performance", 
+      "GitHub Packages": "operational", 
+      "GitHub Pages": "operational", 
+      "Other": "operational"
    }
    ```
    
@@ -135,7 +135,7 @@ Su función es guardar listas de correos a los que se les puede mandar una notif
    Devuelve los tipos de estados en los que se puede encontrar un servicio.
    ```json
    {
-      "status_types" : ['operational', 'degraded_performance', 'partial_outage', 'major_outage']
+      "status_types" : ["operational", "degraded_performance", "partial_outage", "major_outage"]
    }
    ```
    
@@ -143,7 +143,7 @@ Su función es guardar listas de correos a los que se les puede mandar una notif
    Devuelve un json con los servicios que se están monitorizando.
    ```json
    {
-      "services" : <lista con los servicios> 
+      "services" : "<lista con los servicios>" 
    }
    ```
    
@@ -159,7 +159,7 @@ Su función es guardar listas de correos a los que se les puede mandar una notif
    Devuelve un json con la información del downtime que se quiere consultar. Necesita un json con el id del downtime.
    ```json
    {
-      "id": número de id
+      "id": 1
    }
    ```
    
@@ -167,7 +167,7 @@ Su función es guardar listas de correos a los que se les puede mandar una notif
    Devuelve un json con la información del downtime que se quiere consultar. Necesita un json con el id del downtime.
    ```json
    {
-      "id": número de id
+      "id": 1
    }
    ```
    
