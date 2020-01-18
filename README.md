@@ -18,69 +18,8 @@ Con este proyecto se quiere monitorizar los downtimes de las líneas de una fáb
 ## Arquitectura
 Como arquitectura se ha elegido una arquitectura basada en microservicios, donde cada microservicio corresponde con las entidades descritas.
  
-Más información sobre la [arquitectura][arquitectura] del todo el sistema.
+Más información sobre la [arquitectura y el funcionamiento][arquitectura] del todo el sistema.
  
-### Arquitectura por capas
-Se basa en separar la funcionalidad de un servicio en varias capas, para permitir que este sea más fácil de mantener, cambiar y escalar.
- 
-### Capas del microservicio Notifier
-Las capas que contiene este microservicio son:
- 
-1. La capa que contiene el API REST, que configura las rutas con las que se atienden las peticiones.
-2. Una capa con la lógica de negocio que maneja los modelos y controla los procesos que se tiene que seguir.
-3. Una capa con los modelos de datos que se usan.
- 
-A continuación se muestra un esquema de las capas descritas:
-![service_layers][layer_scheme]
- 
-## Microservicio Notifier
-Su función es guardar listas de correos a los que se les puede mandar una notificación. Su funcionamiento a través del API REST es el siguiente:
- 
-1. **GET: /hello**
-   Muestra un 'Hello, World!'. Se usa durante el desarrollo para comprobar que el servicio responde.
-  
-2. **GET: /notifier/prueba**
-   Otra prueba para el desarrollo. En este caso para comprobar que funciona el blueprint de Flask.
-  
-3. **POST: /notifier/email**
-   Subscribe un email a una lista.
-   Necesita como dato un `json` de la forma:
-   ```json
-   {
-      "id_line":"<número_de_línea>",
-      "email":"<email_válido>"
-   }
-   ```
- 
-4. **PUT: /notifier/email**
-   Actualiza el email en una lista.
-   Necesita como dato un `json` de la forma:
-   ```json
-   {
-      "id_line": "<número_de_línea>",
-      "old_email" : "<email_antiguo>",
-      "new_email" : "<email_nuevo>"
-   }
-   ```
-  
-4. **DELETE: /notifier/email**
-   Borra un email de una lista.
-   Necesita como dato un `json` de la forma:
-   ```json
-   {
-      "id_line":"<número_de_línea>",
-      "email":"<email_válido>"
-   }
-   ```
-  
-5. **GET: /notifier/email**
-   Devuelve un json indicando las suscripciones en la que se encuentra dicho email.
-   ```json
-   {
-      "id_lines": ["1"]
-   }
-   ```
-  
  
 ## Lenguajes y tecnologías usadas
 El proyecto se desarrolla usando Python más:
@@ -94,7 +33,7 @@ Más información sobre [lenguajes y tecnologías usadas][tecnologías].
 ## Prerrequisitos
 Las versiones de Python compatibles con el proyecto son:
    Linux:
-       -Mínima: 3.4
+       -Mínima: 3.6
        -Máxima: 3.8 y su versión de desarrollo
  
 Para poder usar la herramienta de construcción es necesario:
@@ -177,97 +116,158 @@ Para más información sobre los comandos que se ejecutan y su opciones de confi
 Como herramienta de integración continua se ha usado `TravisCI` y `Github Actions`. Para más información sobre que se realiza con ambas herramientas puede ir a la [documentación correspodiente][docu_integracion]. También puede consultar los archivos de configuración de [TravisCI][enlace_Travis] y el [workflow de Github Actions][enlace_workflow].
  
 ## Docker
+Se han creado varios contenedores para los microservicios notifier y monitor.
+
 Contenedor: https://hub.docker.com/r/ibe16/notifier
+
+Contenedor: https://hub.docker.com/r/ibe16/monitor
  
-La imagen anterior se ha construido teniendo como base `python:3.6-slim-stretch`, una imagen del DockerHub oficial de `Python` que usa `Debian 9` como sistema operativo y contiene `python 3.6` instalado. Después se han instalado las dependencias necesarias para el funcionamiento del servicio, que son `Flask` y `Gunicorn`.
- 
-Se ha elegido la imagen `python:3.6-slim-stretch` siguiendo los siguientes criterios:
-1. Proviene del repositorio oficial del lenguaje que se está usando.
-2. Contiene la versión del lenguaje con la que se está desarrollando ya instalada.
-3. Es la que mejor rendimiento ofrece en relación al espacio que ocupa. Se pueden ver en la [documentación][docu_bench] correspondiente los benchmark que se han realizado para hacer esta elección.
- 
-A continuación, se muestra el resto de imágenes que se barajaron:
-```shell
-REPOSITORY                 TAG                 IMAGE ID            CREATED             SIZE
-python                     3.6-slim-stretch    fa79f489b3bf        7 days ago          151MB
-python                     3.6-slim-buster     add6920a081f        7 days ago          174MB
-python                     latest              0a3a95c81a2b        7 days ago          932MB
-python                     3.6-alpine          8880aaf979d2        2 weeks ago         94.7MB
-```
-Podemos comprobar como la versión con `Alpine`es la más ligera. La versión `stretch` está basada en Debian 9. La versión `buster` también está basada en Debian. Con la palabra `slim` quiere decir que es una versión reducida de estos sistemas.
- 
-### Uso
-> Para poder usar el Dockerfile es necesario instalar previamente el Docker. Se puede realizar fácilmente siguiendo su [documentación][offi_docu_docker]. También es conveniente configurarlo para usarlo sin la necesidad de hacer `sudo`.
- 
-1. Para construir la imagen a partir del Dockerfile ejecutamos:
-   ```shell
-   $ docker build --build-arg PORT=<puerto_interno> --tag <nombre_imagen>:<etiqueta> .
-   ```
-   > Contruye la imagen en el directorio actual. Pasamos como argumento el <puerto_interno> donde se levantará `Gunicorn`. Si no se pasa ningún argumento por defecto el <puerto_interno> será el 8080.
-   > Por defecto la <etiqueta> que se coloca es `latest`.
- 
-2. Para descargar la imagen desde DockerHub:
-   ```shell
-   $ docker pull ibe16/notifier:latest
-   ```
-   > El puerto interno será el por defecto.
- 
-2. Para ejecutar la imagen en local:
-   ```shell
-   $ docker run --rm -p <puerto_externo>:<puerto_interno> <nombre_imagen>
-   ```
-   > El <puerto_externo> indica el puerto por el que accedemos al contenedor. Para ver que el contenedor se ejecuta correctamente se puede consultar la url `http://0.0.0:<puerto_externo>/hello` que devolverá un 'Hello, World!'.
- 
-Para más información se puede consultar el [Dockerfile][enlace_dockerfile].
- 
-> El repositorio de `DockerHub` se ha configurado para que se actualice la imagen cada vez que se haga un `push` al repositorio de `Github`. Para más información se puede consultar la [documentación][docu_docker_gh] donde explica cómo realizarlo.
+Para consultar como se ha realizado se puede visitar el siguiente [enlace][docu_docker].
  
  
 ## Heroku
 La imagen del microservicio está desplegada en Heroku. Para comprobarlo se puede usar la url: https://cc-notifier.herokuapp.com/hello.
  
-Se ha elegido Heroku como PaaS por ser relativamente famoso, ya que hace que haya mucha documentación sobre él. Además, es gratuito y muy sencillo de usar.
- 
-> **Antes de empezar**
-> Heroku asigna en una variable de entorno un puerto por defecto que se tiene que usar como <puerto_interno> en el Dockerfile. Es decir, no se puede poner un número de puerto explícito para levantar nuestro servicio, si no, que deberemos leer este valor desde una variable de entorno. En este caso la variable que hay que usar es `$PORT`. Se puede consultar en el archivo [Dockerfile][enlace_dockerfile] cómo hacerlo.
- 
-Para desplegarla se han seguido los siguientes pasos:
-1. Descargarse la interfaz de comandos `Heroku CLI`
-2. Crear una aplicación:
-   ```shell
-   $ heroku create <nombre_aplicación>
-   ```
-   > Tras este comando debe aparecer un nuevo repositorio `remote` llamado `heroku`. Se puede comprobar fácilmente haciendo `git remote -v`.
-3. Creamos el fichero `heroku.yml` en la raíz de nuestra aplicación. Para ver como se ha construido se puede consultar el propio [fichero][enlace_herokuyml], aunque, básicamente, lo que hacemos es indicar que vamos a usar el `Dockerfile`.
-4. Hacer `commit` de los cambios.
-5. Establecer como imagen del SO la de Docker.
-   ```shell
-   $ heroku stack:set container
-   ```
-   > Con esto indicamos que vamos usar Docker. En Heroku `stack` es una imagen de sistema operativo. Por defecto se usa `Heroku-18`, pero nosotros queremos usar `container`que es la correspondiente a Docker.
-6. Hacemos `push` de nuestra aplicación a Heroku.
-   ```shell
-   $ git push heroku master
-   ```
-Tras esto podemos consultar en `Heroku` el despliegue de la aplicación.
- 
-> Cómo añadido se ha vinculado el repositorio de `Github` para que cuando se haga `push` automáticamente se despliegue la aplicación. Para más información se puede consultar la [documentación][offi_docu_heroku_gh] donde se explica el proceso.
- 
+Para más información acerca de cómo se ha realizado el despliegue se puede consultar el siguiente [enlace.][docu_heroku]
+
+## Bases de datos
+Se usarán **PostgreSQL** para gestionar y consultar mejor los datos de tipo *DATE* y  **MongoDB** para almacenar a donde hay qué mandar las notificaciones, para que sea más cómodo gestionar las listas.
+
+Para la implementación de ambas bases de datos se ha usado un ORM para mapear los objetos de la base de datos a objetos de Pyhton y marcar los esquemas que deben seguir estos. Para los dos microservicos se ha usado en mismo patrón: una clase para definir cómo son los objetos y que realiza la conexión a la base de datos y otra clase que define las operaciones con la base de datos. 
+
+Para el **Microservicio Notifier** estas clases son:
+- [NotificationList_model.py][enlace_NotificationList_model]
+- [NotificationList.py][enlace_NotificationList]
+
+Para el **Microservicio Monitor** estas clases son:
+- DowntimeRecord_model.py
+- DowntimeRecord.py
+
+### Notifier
+El ORM que se ha usado es `PyMODM` que está construido sobre `Pymongo`. Aquí se puede encontrar un enlace a la [documentación oficial][offi_docu_pymodm].
+
+El motivo por el cual se elegió usar un ORM en vez de directamente el drive de MongoDB que existe para Python fue la necesidad de indicar unas restricciones sobre los datos. En concreto, en los emails que se almacenan, no deben ser una cadena cualquiera si no un email válido. Con el ORM es tan simple como hacer una clase que sea tu modelo ([NotificationList_model.py][enlace_NotificationList_model]) donde se indica los datos que vas a usar y de que tipo van a ser. En este caso tenemos dos tipos:
+1. Un String que sirve como ID para el documento y para guardar el nombre de la lista de correo. De este modo una lista de correo es única en toda la BD.
+2. Una lista de Emails, cada email único en la lista en la que se encuentra. De este modo, la BD no nos deja insertar emails que no son válidos y los emails solo se pueden insertar una vez en una lista de correo.
+
+Después se ha implementado una clase que utiliza este modelo e implementa todas las operaciones con la BD([NotificationList.py][enlace_NotificationList]). Un objeto de la clase `NotificationList` es el que se usará más tarde para realizar la **inyección de dependencias**.
+
+Por último, la clase [Notifier.py][enlace_Notifier] hace uso de un objeto que implemente una conexión a base de datos.
+
+En el fichero [db.py][enlace_db_notifier] se puede ver como se realiza la **inyección de dependencias**.
+
+Para más información se puede consultar cualquier enlace a los archivos anteriores que contienen más documentación.
+
+### Monitor
+Este microservicio usa una BD SQL, concretamente `PostgreSQL`. El motivo principal de usar una BD de este tipo era que fuese más cómodo organizar los datos de downtime. 
+
+Para la implementación se ha usado el ORM `SQLAlchemy`. Aquí se puede consultar la [documentación oficial][offi_docu_sqlalchemy].
+
+El motivo por el cual se ha usado un ORM aquí es facilitar las consultas SQL que se realizan sobre la BD. De esta forma no hace falta usar SQL directamente en el código. sino que tenemos ina abstracción. Además los resultados de estas consultas se mapean a objetos Python directamente. Al igual que en el microservicio anterior se ha usado dos clases:
+- [DowntimeRecord_model.py][enlace_DowntimeRecord_model] que implementa el modelo de la base de datos. La tabla que se describe contiene un id, el nombre del servicio, inició del downtime, final del downtime.
+- [DowntimeRecord.py][enlace_DowntimeRecord] que implementa la consultas y más tarde será el objeto con el que se realiza la **inyección de dependencias**.
+
+Y también, al igual que en el microservicio anterior, la clase [Monitor.py][enlace_monitor] hace uso de un objeto que implementa una conexión a base de datos. 
+
+En el fichero [db.py][enlace_db_monitor] se puede ver como se realiza la **inyección de dependencias**.
+
+Para más información se puede consultar cualquier enlace a los archivos anteriores que contienen más documentación.
+
+## Evaluación de prestaciones
+
+Prestaciones: stress_test.yml
+
+Para la evaluación de las prestaciones de ambos microservicos se ha utlizado `Taurus`. El objetivo que se quiere conseguir es alcanzar las 1000 peteciones/s con 10 usuarios concurrentes. 
+
+### Fichero YML
+Para poder realizar test con Taurus lo primero que tenemos que realizar es un fichero YML que contendrá las pruebas de carga que vamos a realizar. El fichero utlizado será [stress_test.yml][enlace_stress_test].
+
+Para realizar los test todos los microservicios y sus bases de datos se encuentran en contenedores Docker en local.
+
+Como los test contienen varios escenarios, iremos explicando qué se ha hecho y los resultados sobre estos:
+
+### Primer escenario: Microservicio Notifier
+En un primer momento para este microservicio se diseño un test que incluía una secuencias de POST, GET, DELETE. Debido al tiempo que se tarda en hacer un POST y un DELETE el servicio no llegaba al mínimo de prestaciones. Da igual los cambios que se realizasen en el servidor o en la BD, estas prestaciones no mejoraban, en algunos casos incluso empeoraban. Por este motivo se diseño el siguiente test.
+
+El test que se va a realizar sobre este microservicio es:
+- Una petición POST post que registra un nuevo email. Como tenemos 10 usuarios diferentes y todos realizarán la misma petción solo tendrá exito una de ellas. Las demás se comprobará que devuelvan un error 403.
+- Peticiones GET consultando las listas en las que se encuentra el email anterior. Se comprobará que devuelva un código 200 o 404 (en caso de que no exista).
+
+Primero se testeo el microservicio con la base de datos ya implementada y el servidor Gunicorn con 4 workers síncronos, los resultados obtenidos fueron los siguientes:
+
+![n_test1](docs/prestaciones/notifier_sync_w4.png)
+
+Cómo podemos comprobar el microservicio cumple perfectamente las prestaciones que se le exigen. Aún así se han intentado mejorar.
+
+Para la siguiente prueba que se realizó se configuró un poco más Gunicorn, en concreto se usarón workers asíncronos. Por defecto los que se usan son síncronos, pero también está la opción de utilizar los otros llamados `evenlet` y `gevent`. También se va a ajustar el número de workers al número óptimo para el procesador con esta fórmula:(2*CPU_CORES)+1. La máquina donde se está ejecutando el test dispone de 4 núcleos, por tanto se pueden tener 9 workers.
+
+Los resultados fueron:
+![n_test2](docs/prestaciones/notifier_async_w9.png)
+
+El uso de worker asíncronos puede haberse visto degradado por el número de workers usados, ya que el servidor no es el único proceso en la máquina. Se realizó otra prueba dejando el número de workers en 4.
+
+Los resultados fueron:
+![n_test3](docs/prestaciones/notifier_async_w4.png)
+
+En las dos pruebas se obtuvieron resultados similares, además, ocurre un error `java.net.SocketException`, que no tiene nada que ver con el código que se está ejecutando, por lo que el problema puede deberse a las limitaciones que ofrece la imagen del contenedor, ya que la realizar la misma prueba con el servicio desplegado local este error no sucede. 
+
+Los resultados que se obtienen en local con 9 workers de tipo asíncrono son:
+![n_test4](docs/prestaciones/notifier_async_w9_local.png)
+
+Podemos comprobar que se mejora tanto las peticiones por segundo como el ancho de banda, por lo que en local se desplegará de este modo. En Docker se quedará la configuración con workers síncronos.
+
+### Segundo escenario: Microservico Monitor
+Para este microservicio se diseño el siguiente test:
+- 5 peticiones GET que a su vez hacen consultas al API de Github.
+- 1 petición GET que devuelve los estados en los que se puede encontrar un servicio.
+
+El primer test, al igual que con el microservicio anterior, se realizará con 4 workers de tipo síncrono en la imagen de Docker. Los resultados:
+![m_test1](docs/prestaciones/monitor_sync_w4_slim.png)
+
+Como se puede ver los resultados son muy pobres, apenas se llega a las 25 peticiones por segundo. Esto no se debe a que el microservicio tenga un rendimiento pobre si no, que el API de Github no permite que hagamos tantas peticiones seguidas. Mockeando el resultado que debería devolvernos el API conseguimos lo siguiente:
+![m_test2](docs/prestaciones/monitor_mock.png)
+
+Este resultado de por si ya es más que aceptable, pero se realizará una última prueba en local para testear los workers asíncronos:
+![m_test3](docs/prestaciones/monitor_w9_asyn_local.png)
+
+### Tercer escenario: Ambos
+Aquí se han medido las prestaciones con los dos servicios levantados. Las peticiones son las mismas que por separado, excepto, que en el mciroservicio Monitor, en vez de Mockear las peticiones al API de Github solo se harán una vez.
+
+Los resultados para las imágenes de Docker son:
+![test1](docs/prestaciones/monitor-notifier.png)
+
+Para los servicios en local:
+![test2](docs/prestaciones/monitor-notifier-local.png)
+
  
 [arquitectura]:https://ibe16.github.io/CC-19-20-Proyecto/docs/arquitectura/Arquitectura
  
 [docu_bench]:https://ibe16.github.io/CC-19-20-Proyecto/docs/bench/ab
- 
-[docu_docker_gh]:https://ibe16.github.io/CC-19-20-Proyecto/docs/arquitectura/despliegue_git
+
+[docu_docker]:https://ibe16.github.io/CC-19-20-Proyecto/docs/dockerhub/docker
+
+[docu_heroku]:https://ibe16.github.io/CC-19-20-Proyecto/docs/heroku/heroku
  
 [docu_integracion]:https://ibe16.github.io/CC-19-20-Proyecto/docs/ic/integracion_continua
+
+[enlace_db_monitor]: https://github.com/ibe16/CC-19-20-Proyecto/blob/master/monitor/db.py
+
+[enlace_db_notifier]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/notifier/db.py
  
 [enlace_dependencias]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/requirements.txt
+
+[enlace_DowntimeRecord]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/monitor/DowntimeRecord.py
+
+[enlace_DowntimeRecord_model]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/monitor/DowntimeRecord_model.py 
+
+[enlace_monitor]: https://github.com/ibe16/CC-19-20-Proyecto/blob/master/monitor/Monitor.py
+
+[enlace_Notifier]: https://github.com/ibe16/CC-19-20-Proyecto/blob/master/notifier/Notifier.py
  
-[enlace_dockerfile]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/Dockerfile
+[enlace_NotificationList]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/notifier/NotificationList.py
  
-[enlace_herokuyml]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/heroku.yml
- 
+[enlace_NotificationList_model]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/notifier/NotificationList_model.py
+
 [enlace_tasks]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/tasks.py
  
 [enlace_travis]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/.travis.yml
@@ -279,8 +279,10 @@ Tras esto podemos consultar en `Heroku` el despliegue de la aplicación.
 [offi_docu_docker]:https://docs.docker.com/install/linux/docker-ce/ubuntu/
  
 [offi_docu_docker_gh]:https://docs.docker.com/docker-hub/builds/
- 
-[offi_docu_heroku_gh]:https://devcenter.heroku.com/articles/github-integration#enabling-github-integration
+
+[offi_docu_pymodm]:https://pymodm.readthedocs.io/en/stable/
+
+[offi_docu_sqlalchemy]:https://docs.sqlalchemy.org/en/13/
  
 [tecnologías]:https://ibe16.github.io/CC-19-20-Proyecto/docs/tecnologías/Tecnologías
  

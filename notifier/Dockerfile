@@ -27,7 +27,7 @@ ENV PORT_NOTIFIER=${PORT_NOTIFIER}
 ENV SECRET_KEY=${SECRET_KEY}
 
 # Instalamos sólo las dependencias necesarias, sin usar el requirements.txt
-RUN pip install flask gunicorn pymodm Celery
+RUN pip install flask gunicorn pymodm Celery eventlet
 
 # Indicamos el puerto en el que se escucha el microservicio.
 EXPOSE ${PORT_NOTIFIER}
@@ -41,5 +41,5 @@ USER normaluser
 # RUN celery -A notifier.notifier_celery worker 
 
 # Levantamos el microservicio con Gunicorn
-CMD ["sh", "-c", "gunicorn -b 0.0.0.0:${PORT_NOTIFIER} --workers=4  \"notifier:create_app()\""]
+CMD ["sh", "-c", "gunicorn -b 0.0.0.0:${PORT_NOTIFIER} --workers=4 \"notifier:create_app()\""]
 #CMD celery -A notifier.notifier_celery worker -Q notifier

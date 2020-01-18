@@ -57,5 +57,5 @@ EXPOSE ${PORT_MONITOR}
 #RUN celery -A monitor.monitor_celery worker --beat --loglevel=debug
 
 # Levantamos el microservicio con Gunicorn
-CMD ["sh", "-c", "gunicorn -b 0.0.0.0:${PORT_MONITOR} --workers=4  \"monitor:create_app()\""]
+CMD ["sh", "-c", "gunicorn -b 0.0.0.0:${PORT_MONITOR} --workers=1  \"monitor:create_app()\""]
 #CMD python3 -m celery -A monitor.monitor_celery worker -Q monitor --beat -s ./monitor/celerybeat-schedule --loglevel=debug

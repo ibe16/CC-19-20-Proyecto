@@ -16,7 +16,7 @@ def prueba():
 
 @api.route('/email', methods=['POST'])
 def subscribe():
-    """Susbscribe un emaol a una lista
+    """Susbscribe un email a una lista
     Recibe un json con la lista y el email"""
     # recibir el json de la petición
     data = request.get_json()
