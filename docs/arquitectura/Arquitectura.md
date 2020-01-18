@@ -107,8 +107,71 @@ Su función es guardar listas de correos a los que se les puede mandar una notif
 1. **GET: /hello**
    Muestra un 'Hello, World!'. Se usa durante el desarrollo para comprobar que el servicio responde.
 
-2. **GET: /notifier/prueba**
-   Otra prueba para el desarrollo. En este caso para comprobar que funciona el blueprint de Flask.   
+2. **GET: /monitor/status**
+   Devuelve un json con el estado de los servicios
+   ```json
+   {
+      'Git Operations': 'operational', 
+      'API Requests': 'operational', 
+      'Webhooks': 'operational', 
+      'Visit www.githubstatus.com for more information': 'operational', 
+      'Issues, PRs, Projects': 'operational', 
+      'GitHub Actions': 'degraded_performance', 
+      'GitHub Packages': 'operational', 
+      'GitHub Pages': 'operational', 
+      'Other': 'operational'
+   }
+   ```
+   
+3. **GET: /monitor/status/service**
+   Devuelve un json con el estado del servicio. Necesita un json de la forma.
+   ```json
+   {
+      "service": "<nombre>"
+   }
+   ```
+   
+4. **GET: /monitor/status/types**
+   Devuelve los tipos de estados en los que se puede encontrar un servicio.
+   ```json
+   {
+      "status_types" : ['operational', 'degraded_performance', 'partial_outage', 'major_outage']
+   }
+   ```
+   
+5. **GET: /services**
+   Devuelve un json con los servicios que se están monitorizando.
+   ```json
+   {
+      "services" : <lista con los servicios> 
+   }
+   ```
+   
+6. **GET: /downtime/record**
+   Devuelve un json con los Ids de los downtimes de un servicio. Necesita un json con el servicio que se quiere consultar.
+   ```json
+   {
+      "service": "<nombre>"
+   }
+   ```
+   
+7. **GET /downtime**
+   Devuelve un json con la información del downtime que se quiere consultar. Necesita un json con el id del downtime.
+   ```json
+   {
+      "id": número de id
+   }
+   ```
+   
+8. **DELETE: /downtime**
+   Devuelve un json con la información del downtime que se quiere consultar. Necesita un json con el id del downtime.
+   ```json
+   {
+      "id": número de id
+   }
+   ```
+   
+
 
 
 
