@@ -95,14 +95,14 @@ Se han configurado cuatro tareas. Estas son:
    ```
    >Incluido el archivo ```.coverage```.
  
-5. Levantar el microservicio
+5. Levantar los microservicios
    ```shell
    $ invoke start <ip> <puerto>
    ```
-   > Levanta el microservicio usando [Gunicorn][offi_docu_gunicorn], un servidor WSGI HTTP para `Python`. Si no se indica la ip y el puerto donde se quiere enlazar el servicio por defecto se establecerá `0.0.0.0:5000`
+   > Levanta los microservicios usando [Gunicorn][offi_docu_gunicorn], un servidor WSGI HTTP para `Python`. Si no se indica la ip y el puerto donde se quiere enlazar el servicio por defecto se establecerá `0.0.0.0:5000`y el `0.0.0.0:5051`
    > Para comprobar que se ha levantado adecuadamente se puede consultar `http:\\<ip>:<puerto>\hello`. Esto devolverá un `Hello, World!`
  
-6. Parar el microservicio
+6. Parar los microservicios
    ```shell
    $ invoke stop
    ```
@@ -140,8 +140,8 @@ Para el **Microservicio Notifier** estas clases son:
 - [NotificationList.py][enlace_NotificationList]
 
 Para el **Microservicio Monitor** estas clases son:
-- DowntimeRecord_model.py
-- DowntimeRecord.py
+- [DowntimeRecord_model.py][enlace_DowntimeRecord_model]
+- [DowntimeRecord.py][enlace_DowntimeRecord]
 
 ### Notifier
 El ORM que se ha usado es `PyMODM` que está construido sobre `Pymongo`. Aquí se puede encontrar un enlace a la [documentación oficial][offi_docu_pymodm].
@@ -190,7 +190,7 @@ Como los test contienen varios escenarios, iremos explicando qué se ha hecho y 
 En un primer momento para este microservicio se diseño un test que incluía una secuencias de POST, GET, DELETE. Debido al tiempo que se tarda en hacer un POST y un DELETE el servicio no llegaba al mínimo de prestaciones. Da igual los cambios que se realizasen en el servidor o en la BD, estas prestaciones no mejoraban, en algunos casos incluso empeoraban. Por este motivo se diseño el siguiente test.
 
 El test que se va a realizar sobre este microservicio es:
-- Una petición POST post que registra un nuevo email. Como tenemos 10 usuarios diferentes y todos realizarán la misma petción solo tendrá exito una de ellas. Las demás se comprobará que devuelvan un error 403.
+- Una petición POST que registra un nuevo email. Como tenemos 10 usuarios diferentes y todos realizarán la misma petción solo tendrá exito una de ellas. Las demás se comprobará que devuelvan un error 403.
 - Peticiones GET consultando las listas en las que se encuentra el email anterior. Se comprobará que devuelva un código 200 o 404 (en caso de que no exista).
 
 Primero se testeo el microservicio con la base de datos ya implementada y el servidor Gunicorn con 4 workers síncronos, los resultados obtenidos fueron los siguientes:
@@ -230,7 +230,7 @@ Como se puede ver los resultados son muy pobres, apenas se llega a las 25 petici
 Este resultado de por si ya es más que aceptable, pero se realizará una última prueba en local para testear los workers asíncronos:
 ![m_test3](docs/prestaciones/monitor_w9_asyn_local.png)
 
-### Tercer escenario: Ambos
+### Tercer escenario: Resultado final con ambos microservicios levantados
 Aquí se han medido las prestaciones con los dos servicios levantados. Las peticiones son las mismas que por separado, excepto, que en el mciroservicio Monitor, en vez de Mockear las peticiones al API de Github solo se harán una vez.
 
 Los resultados para las imágenes de Docker son:
@@ -267,6 +267,8 @@ Para los servicios en local:
 [enlace_NotificationList]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/notifier/NotificationList.py
  
 [enlace_NotificationList_model]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/notifier/NotificationList_model.py
+
+[enlace_stress_test]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/stress_test.py
 
 [enlace_tasks]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/tasks.py
  
