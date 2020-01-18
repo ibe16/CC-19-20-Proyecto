@@ -1,24 +1,41 @@
 execution:
+    # Herramienta con la que se ejecutará los tests
     - executor: jmeter
+      # Número de usuarios concurrentes
       concurrency: 10
+      # El número de usuarios irá aunmentando duranre 10s
       ramp-up: 10s
+      # Duuración de la prueba
       hold-for: 50s
+      # Escenario que se usará en la prueba
       scenario: monitor-notifier
-    
+   
+# Escenarios que se describirán
 scenarios:
+    # Nombre del escenario
     notifier:
+        # Peticiones que se van a hacer
         requests:
+        # Indica que la petición se realizará una vez por hebra
         - once:
+            # URL dónde se hará la petición
           - url: http://0.0.0.0:8080/notifier/email
+            # Verbo HTTP
             method: POST
+            # Etiqueta para identificar la petición
             label: post-email
+            # Aserciones que se tienen que cumplir
+            # El código que devuelva esta petición debe ser 200 o 403
             assert:
             - contains:
               - "200|403"
               subject: http-code
               regexp: true
+            # Cabeceras de la petición
             headers:
+              # Tipo de contenido que se enviará
               Content-Type: application/json
+            # JSON que se enviará en el body de la petición
             body: 
               id_line: testeo
               email: testeo@email.com
