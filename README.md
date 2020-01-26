@@ -143,35 +143,7 @@ Para el **Microservicio Monitor** estas clases son:
 - [DowntimeRecord_model.py][enlace_DowntimeRecord_model]
 - [DowntimeRecord.py][enlace_DowntimeRecord]
 
-### Notifier
-El ORM que se ha usado es `PyMODM` que está construido sobre `Pymongo`. Aquí se puede encontrar un enlace a la [documentación oficial][offi_docu_pymodm].
-
-El motivo por el cual se elegió usar un ORM en vez de directamente el drive de MongoDB que existe para Python fue la necesidad de indicar unas restricciones sobre los datos. En concreto, en los emails que se almacenan, no deben ser una cadena cualquiera si no un email válido. Con el ORM es tan simple como hacer una clase que sea tu modelo ([NotificationList_model.py][enlace_NotificationList_model]) donde se indica los datos que vas a usar y de que tipo van a ser. En este caso tenemos dos tipos:
-1. Un String que sirve como ID para el documento y para guardar el nombre de la lista de correo. De este modo una lista de correo es única en toda la BD.
-2. Una lista de Emails, cada email único en la lista en la que se encuentra. De este modo, la BD no nos deja insertar emails que no son válidos y los emails solo se pueden insertar una vez en una lista de correo.
-
-Después se ha implementado una clase que utiliza este modelo e implementa todas las operaciones con la BD([NotificationList.py][enlace_NotificationList]). Un objeto de la clase `NotificationList` es el que se usará más tarde para realizar la **inyección de dependencias**.
-
-Por último, la clase [Notifier.py][enlace_Notifier] hace uso de un objeto que implemente una conexión a base de datos.
-
-En el fichero [db.py][enlace_db_notifier] se puede ver como se realiza la **inyección de dependencias**.
-
-Para más información se puede consultar cualquier enlace a los archivos anteriores que contienen más documentación.
-
-### Monitor
-Este microservicio usa una BD SQL, concretamente `PostgreSQL`. El motivo principal de usar una BD de este tipo era que fuese más cómodo organizar los datos de downtime. 
-
-Para la implementación se ha usado el ORM `SQLAlchemy`. Aquí se puede consultar la [documentación oficial][offi_docu_sqlalchemy].
-
-El motivo por el cual se ha usado un ORM aquí es facilitar las consultas SQL que se realizan sobre la BD. De esta forma no hace falta usar SQL directamente en el código. sino que tenemos ina abstracción. Además los resultados de estas consultas se mapean a objetos Python directamente. Al igual que en el microservicio anterior se ha usado dos clases:
-- [DowntimeRecord_model.py][enlace_DowntimeRecord_model] que implementa el modelo de la base de datos. La tabla que se describe contiene un id, el nombre del servicio, inició del downtime, final del downtime.
-- [DowntimeRecord.py][enlace_DowntimeRecord] que implementa la consultas y más tarde será el objeto con el que se realiza la **inyección de dependencias**.
-
-Y también, al igual que en el microservicio anterior, la clase [Monitor.py][enlace_monitor] hace uso de un objeto que implementa una conexión a base de datos. 
-
-En el fichero [db.py][enlace_db_monitor] se puede ver como se realiza la **inyección de dependencias**.
-
-Para más información se puede consultar cualquier enlace a los archivos anteriores que contienen más documentación.
+Para saber más acerca de la implementación de las bases de datos consulte el siguiente [fichero][docu_basesdatos].
 
 ## Evaluación de prestaciones
 
@@ -179,68 +151,152 @@ Prestaciones: stress_test.yml
 
 Para la evaluación de las prestaciones de ambos microservicos se ha utlizado `Taurus`. El objetivo que se quiere conseguir es alcanzar las 1000 peteciones/s con 10 usuarios concurrentes. 
 
-### Fichero YML
-Para poder realizar test con Taurus lo primero que tenemos que realizar es un fichero YML que contendrá las pruebas de carga que vamos a realizar. El fichero utlizado será [stress_test.yml][enlace_stress_test].
+Para saber más acerca de las prestaciones consulte el siguiente [enlace][docu_prestaciones].
 
-Para realizar los test todos los microservicios y sus bases de datos se encuentran en contenedores Docker en local.
+## Creación de una máquina virtual
+Para la creación de la máquina virtual vamos a usar Vagrant más Virtualbox. Lo primero que tenemos que hacer es descargar e instalar estás dos herramientas. Después para crear el `Vagrantfile` ejecutamos el comando `vagrant init` en la raíz del proyecto.
 
-Como los test contienen varios escenarios, iremos explicando qué se ha hecho y los resultados sobre estos:
+Se puede consultar el fichero [Vagrantfile][enlace_vagrantfile] que contiene comentarios explicativos acerca de la creación de la máquina virtual.
 
-### Primer escenario: Microservicio Notifier
-En un primer momento para este microservicio se diseño un test que incluía una secuencias de POST, GET, DELETE. Debido al tiempo que se tarda en hacer un POST y un DELETE el servicio no llegaba al mínimo de prestaciones. Da igual los cambios que se realizasen en el servidor o en la BD, estas prestaciones no mejoraban, en algunos casos incluso empeoraban. Por este motivo se diseño el siguiente test.
+La máquina virtual se usará para desplegar los contenedores de docker que ya se tenían anteriormente.
 
-El test que se va a realizar sobre este microservicio es:
-- Una petición POST que registra un nuevo email. Como tenemos 10 usuarios diferentes y todos realizarán la misma petción solo tendrá exito una de ellas. Las demás se comprobará que devuelvan un error 403.
-- Peticiones GET consultando las listas en las que se encuentra el email anterior. Se comprobará que devuelva un código 200 o 404 (en caso de que no exista).
+## Provisionamiento con Ansible
+Una vez que tengamos la máquina virtual configurada, el siguiente paso es hacer el provisionamiento. Para ello usaremos **Ansible**.
 
-Primero se testeo el microservicio con la base de datos ya implementada y el servidor Gunicorn con 4 workers síncronos, los resultados obtenidos fueron los siguientes:
+Para poder utilizar Ansible deberemos descargarlo primero. En mi caso al utilizar un gestor de versiones para Python se ha instalado con `pip`.
 
-![n_test1](docs/prestaciones/notifier_sync_w4.png)
+Lo siguiente que hay que hacer es crear los ficheros de configuración de Ansible:
+1. Un fichero de configuración general [ansible.cfg][enlace_ansiblecfg].
+2. Un fichero, **inventario**, con el nombre de los hosts que se van a utilizar [ansible_hosts][enlace_ansiblehosts].
+3. Los playbooks que vayamos a usar.
 
-Cómo podemos comprobar el microservicio cumple perfectamente las prestaciones que se le exigen. Aún así se han intentado mejorar.
+> Si usamos Vagrant para automatizar el provisionamiento debemos indicar donde se encuentra el fichero que queremos utilizar como inventario. Si no, Vagrant creará uno por defecto.
 
-Para la siguiente prueba que se realizó se configuró un poco más Gunicorn, en concreto se usarón workers asíncronos. Por defecto los que se usan son síncronos, pero también está la opción de utilizar los otros llamados `evenlet` y `gevent`. También se va a ajustar el número de workers al número óptimo para el procesador con esta fórmula:(2*CPU_CORES)+1. La máquina donde se está ejecutando el test dispone de 4 núcleos, por tanto se pueden tener 9 workers.
+Después de esto en nuestro `Vagrantfile` tenemos que indicar:
+1. Qué hosts de ansible vamos a usar.
+2. Dónde se encuentran los playbooks que vamos a utilizar.
+3. Dónde se encuentra el inventario si no usamos el por defecto.
 
-Los resultados fueron:
-![n_test2](docs/prestaciones/notifier_async_w9.png)
+> Para más información se puede consultar el [Vagrantfile][enlace_vagrantfile] y los [ficheros de configuración] de Ansible.
 
-El uso de worker asíncronos puede haberse visto degradado por el número de workers usados, ya que el servidor no es el único proceso en la máquina. Se realizó otra prueba dejando el número de workers en 4.
+## Despliegue en Azure
+Para el despliegue de la MV en Azure se han seguido los siguientes pasos:
+1. Crear una cuenta de estudiante en Azure
+2. Instalar Azure-CLI. Para ello se ha seguido la siguiente [documentación][offi_docu_install_azure].
+3. Registramos la aplicación en Azure. Esto nos proporcionará una serie de claves para poder crear la MV desde Vagrant.
+    ```shell
+    $ az ad sp create-for-rbac
+    ```
+4. Conseguir el ID de nuestra subscripción de azure
+    ```shell
+    $ az account list --query "[?isDefault].id" -o tsv
+    ```
+5. Creamos las siguientes variables de entorno para guardar las claves que nos ha proporcionado los pasos anteriores:
+    - AZURE_TENANT_ID = `tenant`
+    - AZURE_CLIENT_ID = `appId`
+    - AZURE_CLIENT_SECRET = `password`
+    - AZURE_SUBSCRIPTION_ID = `SubscriptionId`
+6. Modificamos el [Vagrantfile][enlace_vagrantfile] para que use como proveedor Azure. Se puede consultar el fichero para más información. También tendremos que añadir la inofrmación necensario al [inventario][enlace_ansiblehosts].
+7. Instalamos el plugin de Vagrant `vagrant-azure`.
+    ```shell
+    $ vagrant plugin install vagrant-azure
+    ```
+8. Instalamos una `box` que Vagrant pueda usar. Realmente esta `box` no hace nada.
+    ```shell
+    $ vagrant box add azure https://github.com/azure/vagrant-azure/raw/v2.0/dummy.box --provider azure
+    ```
+> Para los pasos del 3 al 9 se ha seguido la siguiente [documentación][use_vagrant_azure].
 
-Los resultados fueron:
-![n_test3](docs/prestaciones/notifier_async_w4.png)
+Por último debemos ejecutar `vagrant up --privider=azure` para la creación de la máquina.
 
-En las dos pruebas se obtuvieron resultados similares, además, ocurre un error `java.net.SocketException`, que no tiene nada que ver con el código que se está ejecutando, por lo que el problema puede deberse a las limitaciones que ofrece la imagen del contenedor, ya que la realizar la misma prueba con el servicio desplegado local este error no sucede. 
+## Comandos para provisionar la máquina
 
-Los resultados que se obtienen en local con 9 workers de tipo asíncrono son:
-![n_test4](docs/prestaciones/notifier_async_w9_local.png)
+Cuando creamos la máquina virtual con vagrant se ejecuta el playbook [provisioning.yml][enlace_provisioning] automáticamente. Este lo que hace es actualizar, instalar las dependencias necesarios para poder usar Docker y Docker-Compose, descargar las imágenes necesarias y contruir los contenedores. Una vez que la máquina está cosntruida también podemos ejecutar este playbook haciendo:
+```
+$ vagrant provision
 
-Podemos comprobar que se mejora tanto las peticiones por segundo como el ancho de banda, por lo que en local se desplegará de este modo. En Docker se quedará la configuración con workers síncronos.
+```
 
-### Segundo escenario: Microservico Monitor
-Para este microservicio se diseño el siguiente test:
-- 5 peticiones GET que a su vez hacen consultas al API de Github.
-- 1 petición GET que devuelve los estados en los que se puede encontrar un servicio.
+Para levantar los servicios se ha realizado el playbook [start_services.yml][enlace_startservices]. Para ejecutarlo:
+```
+$ ansible-playbook -i ./provision/ansible_hosts ./provision/start_services.yml
 
-El primer test, al igual que con el microservicio anterior, se realizará con 4 workers de tipo síncrono en la imagen de Docker. Los resultados:
-![m_test1](docs/prestaciones/monitor_sync_w4_slim.png)
+```
 
-Como se puede ver los resultados son muy pobres, apenas se llega a las 25 peticiones por segundo. Esto no se debe a que el microservicio tenga un rendimiento pobre si no, que el API de Github no permite que hagamos tantas peticiones seguidas. Mockeando el resultado que debería devolvernos el API conseguimos lo siguiente:
-![m_test2](docs/prestaciones/monitor_mock.png)
+Para pararlos existe el playbook [stop_services.yml][enlace_stopservices]. Para ejecutarlo: 
+```
+$ ansible-playbook -i ./provision/ansible_hosts ./provision/stop_services.yml
 
-Este resultado de por si ya es más que aceptable, pero se realizará una última prueba en local para testear los workers asíncronos:
-![m_test3](docs/prestaciones/monitor_w9_asyn_local.png)
+```
 
-### Tercer escenario: Resultado final con ambos microservicios levantados
-Aquí se han medido las prestaciones con los dos servicios levantados. Las peticiones son las mismas que por separado, excepto, que en el mciroservicio Monitor, en vez de Mockear las peticiones al API de Github solo se harán una vez.
+## Elección del SO para la máquina virtual.
 
-Los resultados para las imágenes de Docker son:
-![test1](docs/prestaciones/monitor-notifier.png)
+Bien, una vez tenemos la confuguración necesaria para crear y aprovisionar las MV vamos a elegir un SO para ellas. Para ello tenemos que tener en cuenta que el [rol de Ansible][rol_ansible] que estamos utilizando tiene compatibilidad solo con las siguientes plataformas:
 
-Para los servicios en local:
-![test2](docs/prestaciones/monitor-notifier-local.png)
+- Ubuntu 16.04 LTS (Xenial)
+- Ubuntu 18.04 LTS (Bionic)
+- Debian 9 (Stretch)
+- Debian 10 (Buster)
 
- 
+Las box que están disponibles para Vagrant para hacer las pruebas locales son:
+- ubuntu/xenial64 (Ubuntu 16.04 LTS)
+- ubuntu/bionic64 (Ubuntu 18.04 LTS)
+- debian/stretch64 (Debian 9)
+- debian/buster64 (Debian 10)
+
+Los resultados obtenidos son los siguientes:
+
+### Ubuntu 16.04 LTS
+![prestaciones_u16](docs/provisionamiento/prestaciones/ubuntu16.png)
+
+### Ubuntu 18.04 LTS
+![prestaciones_u18](docs/provisionamiento/prestaciones/ubuntu18.png)
+
+### Debian 9
+![prestaciones_d9](docs/provisionamiento/prestaciones/debian9.png)
+
+### Debian 10
+![prestaciones_d10](docs/provisionamiento/prestaciones/debian10.png)
+
+Como se puede ver el sistema operativo que ofrece mejores prestaciones es **Debian 10**, así que este será el que usemos para construir las máquinas virtuales.
+
+## Test de prestaciones en local
+Para la máquina vistual que se ha desplegado en local se ha elegido la siguiente configuración:
+- 2 CPUs
+- 2 GB de RAM
+
+Como los recursos de los que dispone son limitados, no podemos esperar un nivel de prestaciones similar al que obteníamos corriendo los microservicios en local.
+
+Los resultados que se obtienen para cada microservicio son:
+
+### Microservicio Notifier
+![prestaciones_notifer_local](docs/provisionamiento/prestaciones/notifier_local.png)
+
+### Microservicio Monitor
+![prestaciones_monitor_local](docs/provisionamiento/prestaciones/monitor_local.png)
+
+### Ambos microservicios
+![prestaciones](docs/provisionamiento/prestaciones/debian10.png)
+
+
+## Test de prestaciones para la MV en Azure
+
+Se intentó hacer test de prestaciones para la máquina virtual que está desplegada en Azure. Sin embargo, está dispone de una configuración por defecto que previene los ataques DDoS, por lo que las prestaciones que se obtienen al realizar los test no son muy fiables. Aquí se encuentra el enlace donde se explica esta configuración de seguridad: https://docs.microsoft.com/es-es/azure/virtual-network/ddos-protection-overview
+
+La máquina dispones de la siguiente configuración:
+- 2 CPUs
+- 8 GB RAM
+
+Son unos recursos hardware similares a los que se tienen en la cuando se pasan los test en local (mi ordenader dispone de 4CPUs y 8GB de RAM), sin embargo las prestaciones que se obtienen son las siguientes:
+
+![prestaciones_azure](docs/provisionamiento/prestaciones/azure.png)
+
+Al no poderse desactivar la opción de seguridad y no haber un método que nos permita añadir IPs seguras o similar, no podemos asegurar cual es el nivel de prestaciones de los servicios.
+
+
 [arquitectura]:https://ibe16.github.io/CC-19-20-Proyecto/docs/arquitectura/Arquitectura
+
+[docu_basesdatos]: https://ibe16.github.io/CC-19-20-Proyecto/docs/inyeccion_dependencias/bases_de_datos
  
 [docu_bench]:https://ibe16.github.io/CC-19-20-Proyecto/docs/bench/ab
 
@@ -249,6 +305,12 @@ Para los servicios en local:
 [docu_heroku]:https://ibe16.github.io/CC-19-20-Proyecto/docs/heroku/heroku
  
 [docu_integracion]:https://ibe16.github.io/CC-19-20-Proyecto/docs/ic/integracion_continua
+
+[docu_prestaciones]: https://ibe16.github.io/CC-19-20-Proyecto/docs/prestaciones/resultados
+
+[enlace_ansiblecfg]: https://github.com/ibe16/CC-19-20-Proyecto/blob/master/provision/ansible.cfg
+
+[enlace_ansiblehosts]: https://github.com/ibe16/CC-19-20-Proyecto/blob/master/provision/ansible_hosts
 
 [enlace_db_monitor]: https://github.com/ibe16/CC-19-20-Proyecto/blob/master/monitor/db.py
 
@@ -268,12 +330,18 @@ Para los servicios en local:
  
 [enlace_NotificationList_model]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/notifier/NotificationList_model.py
 
-[enlace_stress_test]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/stress_test.py
+[enlace_provisioning]: https://github.com/ibe16/CC-19-20-Proyecto/blob/master/provision/provisioning.yml
+
+[enlace_startservices]: https://github.com/ibe16/CC-19-20-Proyecto/blob/master/provision/start_services.yml
+
+[enlace_stopservices]: https://github.com/ibe16/CC-19-20-Proyecto/blob/master/provision/stop_services.yml
 
 [enlace_tasks]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/tasks.py
  
 [enlace_travis]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/.travis.yml
  
+[enlace_vagrantfile]: https://github.com/ibe16/CC-19-20-Proyecto/blob/master/Vagrantfile
+
 [enlace_workflow]:https://github.com/ibe16/CC-19-20-Proyecto/blob/master/.github/workflows/pythonpackage.yml
  
 [offi_docu_gunicorn]: https://gunicorn.org/
@@ -282,10 +350,16 @@ Para los servicios en local:
  
 [offi_docu_docker_gh]:https://docs.docker.com/docker-hub/builds/
 
+[offi_docu_install_azure]: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-apt?view=azure-cli-latest
+
 [offi_docu_pymodm]:https://pymodm.readthedocs.io/en/stable/
 
 [offi_docu_sqlalchemy]:https://docs.sqlalchemy.org/en/13/
  
+[rol_ansible]: https://github.com/nickjj/ansible-docker
+
 [tecnologías]:https://ibe16.github.io/CC-19-20-Proyecto/docs/tecnologías/Tecnologías
+
+[use_vagrant_azure]: https://github.com/Azure/vagrant-azure
  
 [layer_scheme]:docs/arquitectura/esquema_capas.jpg

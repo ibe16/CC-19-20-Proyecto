@@ -124,10 +124,85 @@ scenarios:
           body:
             id: 1
 
+    monitor-vm:
+      requests:
+        - once:
+          - url: http://0.0.0.0:8081/monitor/status
+            method: GET
+            label: get-status
+            assert:
+            - contains:
+              - "200"
+              subject: http-code
+              regexp: true
+        - once:
+          - url: http://0.0.0.0:8081/monitor/status/service
+            method: GET
+            label: get-status-service
+            assert:
+            - contains:
+              - "200"
+              subject: http-code
+              regexp: true
+  
+            headers: 
+              Content-Type: application/json
+            body:
+              service: GitHub Actions
+  
+        - url: http://0.0.0.0:8081/monitor/status/types
+          method: GET
+          label: get-status-types
+          assert:
+          - contains:
+            - "200"
+            subject: http-code
+            regexp: true
+  
+        - once:
+          - url: http://0.0.0.0:8081/monitor/services
+            method: GET
+            label: get-services
+            assert:
+            - contains:
+              - "200"
+              subject: http-code
+              regexp: true
+  
+        - once:
+          - url: http://0.0.0.0:8081/monitor/downtime/record
+            method: GET
+            label: get-downtime-record
+            assert:
+            - contains:
+              - "200"
+              subject: http-code
+              regexp: true
+  
+            headers: 
+              Content-Type: application/json
+            body:
+              service: GitHub Actions
+  
+        - once:
+          - url: http://0.0.0.0:8081/monitor/downtime
+            method: GET
+            label: get-downtime
+            assert:
+            - contains:
+              - "200"
+              subject: http-code
+              regexp: true
+  
+            headers: 
+              Content-Type: application/json
+            body:
+              id: 1
+
     monitor-notifier:
       requests:
       - once:
-        - url: http://0.0.0.0:8081/monitor/status
+        - url: http://137.135.15.76:8081/monitor/status
           method: GET
           label: get-status
           assert:
@@ -136,7 +211,7 @@ scenarios:
             subject: http-code
             regexp: true
       - once:
-        - url: http://0.0.0.0:8081/monitor/status/service
+        - url: http://137.135.15.76:8081/monitor/status/service
           method: GET
           label: get-status-service
           assert:
@@ -150,7 +225,7 @@ scenarios:
           body:
             service: GitHub Actions
 
-      - url: http://0.0.0.0:8081/monitor/status/types
+      - url: http://137.135.15.76:8081/monitor/status/types
         method: GET
         label: get-status-types
         assert:
@@ -160,7 +235,7 @@ scenarios:
           regexp: true
 
       - once:
-        - url: http://0.0.0.0:8081/monitor/services
+        - url: http://137.135.15.76:8081/monitor/services
           method: GET
           label: get-services
           assert:
@@ -170,7 +245,7 @@ scenarios:
             regexp: true
 
       - once:
-        - url: http://0.0.0.0:8081/monitor/downtime/record
+        - url: http://137.135.15.76:8081/monitor/downtime/record
           method: GET
           label: get-downtime-record
           assert:
@@ -185,7 +260,7 @@ scenarios:
             service: GitHub Actions
 
       - once:
-        - url: http://0.0.0.0:8081/monitor/downtime
+        - url: http://137.135.15.76:8081/monitor/downtime
           method: GET
           label: get-downtime
           assert:
@@ -200,7 +275,7 @@ scenarios:
             id: 1
 
       - once:
-        - url: http://0.0.0.0:8080/notifier/email
+        - url: http://137.135.15.76:8080/notifier/email
           method: POST
           label: post-email
           assert:
@@ -214,7 +289,7 @@ scenarios:
             id_line: testeo
             email: testeo@email.com
 
-      - url: http://0.0.0.0:8080/notifier/email
+      - url: http://137.135.15.76:8080/notifier/email
         method: GET
         label: get-email
         assert:
