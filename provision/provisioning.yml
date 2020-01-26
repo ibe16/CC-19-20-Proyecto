@@ -1,0 +1,54 @@
+# Referencias
+# https://docs.ansible.com/ansible/latest/reference_appendices/playbooks_keywords.html
+# http://jj.github.io/CC/documentos/temas/Provision.html
+# https://github.com/nickjj/ansible-docker
+# https://stackoverflow.com/questions/41535838/how-to-run-apt-update-and-upgrade-via-ansible-shell
+# https://docs.ansible.com/ansible/latest/modules/docker_compose_module.html#docker-compose-module
+
+
+- hosts: all
+  become: yes
+    
+  # Tareas que se van a ejecutar antes de empezar los roles y las tareas
+  # La usamos para actualizar 
+  pre_tasks:
+    - name: Actualizar
+      apt:
+        update_cache: yes
+      
+  # Se usa un rol de ansible para instalar Docker y Docker compose
+  # A parte también instala todas las dependencias necesarias
+  # https://github.com/nickjj/ansible-docker
+  roles:
+    - role: "nickjj.docker"
+      tags: ["docker"]
+      docker__edition: "ce"           # Elegimos la edición de docker que queremos instalar
+      docker__version: ""             # Versión de docker que queremos instalar, si ponemos "" instala la última versión
+      docker__state: "present"        # Con present indicamos que no queremos que nos actualice la versión
+      docker__compose_version: ""     # Versión de docker-compose si ponemos "" instala la última
+
+  # Tareas que va a ejecutar el playbook
+  tasks:
+    # Copiamos el archvico de docker-compose que vamos a usar para levantar las imágenes de docker
+    - name: Copiamos el archivo docker-compose
+      copy:
+        src: "./vm-docker-compose.yml"
+        dest: "./docker-compose.yml"
+
+    # Copiamos el archivo .env que usará docker-compose para asignar las variables de entorno
+    - name: Copiamos el archivo con las variables de entorno
+      copy:
+        src: "./.env"
+        dest: "./.env"
+
+    # - name: Hacemos docker-compose
+    #   docker_compose:
+    #     state: "present"
+    #     project_src: "./"
+
+    # En la medida de lo posible hay que evitar ejecutar comandos de shell
+    # En este caso el comando de docker-compose de Ansible no funcionaba correctamente
+    # por este motivo se ha usado la shell
+    - name: Hacemos docker-compose
+      shell: "docker-compose build"
+

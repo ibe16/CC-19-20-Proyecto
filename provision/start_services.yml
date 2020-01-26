@@ -1,0 +1,11 @@
+# Referencias
+# https://medium.com/@perwagnernielsen/ansible-tutorial-part-1-inventory-files-vagrant-and-remote-hosts-33a15b0185c0
+# https://docs.ansible.com/ansible/latest/network/getting_started/first_playbook.html
+
+# Este playbook lo usaremos para arranacar las imágenes de docker que se encuentran en la MV
+- hosts: all
+  become: yes
+
+  tasks:
+    - name: Levantamos los servcios
+      shell: "docker-compose up --detach" 

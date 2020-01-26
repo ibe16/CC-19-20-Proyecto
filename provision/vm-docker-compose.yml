@@ -1,0 +1,116 @@
+# Este docker-compose se usará para desplegar los servidores de los microservicios
+# en contendores para hacer el test de carga
+
+# Indicamos la versión de docker-compose que se va a usar en el fichero
+version: '3'
+
+# Se incarán los contenedores que se van a desplegar
+services:
+
+    # Contenedor para la base de datos 
+    mongodb:
+        # Imagen del contenedor
+        image: mongo
+        # Nombre que tendrá en contenedor
+        container_name: mongodb
+        # Puerto interno y externo que se usará
+        ports:
+            - "27017:27017"
+        # Red en la que se encontrará en contenedor
+        networks:
+            # Nombre de la red
+            net:
+                # Alias de la imagen dentro de la red
+                aliases:
+                    - mongodb
+    
+    # El otro contenedor para la otra base de datos
+    postgres:
+        # Imagen del contenedor
+        image: postgres
+        # Nombre que tendrá en contenedor
+        container_name: postgres
+        # Variables de entorno que necesita el contenedor
+        environment: 
+            - POSTGRES_USER=${POSTGRES_USER}
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            - POSTGRES_DB=${POSTGRES_DB}
+        # Puerto interno y externo que se usará
+        ports:
+            - "5433:5432"
+        # Red en la que se encontrará en contenedor
+        networks:
+             # Nombre de la red
+            net:
+                # Alias de la imagen dentro de la red
+                aliases:
+                    - postgres
+
+    # Contenedor del microservicio notifier
+    notifier:
+        # Nombre del contenedor
+        container_name: notifier
+        # Nombre de la imagen para subirla a DockerHub
+        image: ibe16/notifier
+        # Variables de entorno que necesita el contenedor
+        environment: 
+            - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+            - CELERY_BACKEND=${CELERY_BACKEND}
+            - MONGO_URI=${MONGO_URI}
+            - CORREO=${CORREO}
+            - PASSWORD=${PASSWORD}
+            - SMTP_PORT=${SMTP_PORT}
+            - SMTP_SERVER=${SMTP_SERVER}
+            - PORT_NOTIFIER=${PORT_NOTIFIER}
+            - SECRET_KEY=${SECRET_KEY}
+        # Contenedores que necesitan estar en funcionamiento para poder contruir este
+        depends_on:
+            - mongodb
+        # Puerto interno y externo que se usará
+        ports:
+            - "${PORT_NOTIFIER}:${PORT_NOTIFIER}"
+        # Red en la que se encontrará en contenedor
+        networks:
+            # Nombre de la red
+            net:
+                # Alias del contenedor dentro de la red
+                aliases:
+                    - notifier
+
+    # Contenedor para el microservicio monitor
+    monitor:
+        # Nombre de la imagen para subirla a DockerHub
+        image: ibe16/monitor
+        # Variables de entorno que necesita el contenedor
+        environment: 
+            - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+            - CELERY_BACKEND=${CELERY_BACKEND}
+            - POSTGRES_USER=${POSTGRES_USER}
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            - POSTGRES_DB=${POSTGRES_DB}
+            - POSTGRES_HOST=${POSTGRES_HOST}
+            - MONGO_URI=${MONGO_URI}
+            - SECRET_KEY=${SECRET_KEY}
+            - PORT_MONITOR=${PORT_MONITOR}
+            - CORREO=${CORREO}
+            - PASSWORD=${PASSWORD}
+            - SMTP_PORT=${SMTP_PORT}
+            - SMTP_SERVER=${SMTP_SERVER}
+        # Contenedores que necesitan estar en funcionamiento para poder contruir este
+        depends_on:
+            - postgres
+        # Puerto interno y externo que se usará
+        ports:
+            - "${PORT_MONITOR}:${PORT_MONITOR}"
+        # Red en la que se encontrará en contenedor
+        networks:
+            # Nombre de la red
+            net:
+                # Alias del contenedor dentro de la red
+                aliases:
+                    - monitor
+   
+# Define la red donde vamos a desplegar la imágenes
+networks: 
+    # Nombre de la red
+    net:

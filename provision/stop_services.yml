@@ -1,0 +1,7 @@
+  # Este playbook lo usaremos para parar las imágenes de docker que se encuentran en la MV
+- hosts: all
+  become: yes
+
+  tasks:
+    - name: Apagamos los servicios
+      shell: "docker-compose down"

@@ -1,0 +1,21 @@
+# Referencias:
+#   - Apuntes de la asignatura de CC: http://jj.github.io/CC/documentos/temas/Provision.html
+#
+
+# Configuración para la máquina virtual de Virtualbox
+[vagrantboxes]
+monitoring_local ansible_ssh_host=127.0.0.1  
+
+[vagrantboxes:vars]
+ansible_ssh_port=2222
+ansible_ssh_private_key_file='.vagrant/machines/default/virtualbox/private_key'
+ansible_user='vagrant'
+
+# Configuración para la máquina virtual de Azure
+[azure]
+monitoring_azure ansible_host=monitoringcloudcomputing.westus.cloudapp.azure.com
+
+[azure:vars]
+ansible_port=22 
+ansible_user='vagrant' 
+ansible_ssh_private_key_file='/home/irene/.ssh/id_rsa'
