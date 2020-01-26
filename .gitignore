@@ -126,3 +126,6 @@ dmypy.json
 
 # Vscode carpet
 .vscode/
+
+# Vagrant files
+.vagrant
