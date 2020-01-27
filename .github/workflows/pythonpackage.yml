@@ -20,8 +20,8 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Instalar libpq-dev #Instalar este paquete necesario para utilizar el conector de PostgresSQL para Python
-      run: sudo apt-get install libpq-dev
+#    - name: Instalar libpq-dev #Instalar este paquete necesario para utilizar el conector de PostgresSQL para Python
+#      run: sudo apt-get install libpq-dev
       
     - name: Instalar dependecias  #Instalamos pip y después instalamos las dependencias
       run: |
