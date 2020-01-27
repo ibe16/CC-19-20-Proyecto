@@ -177,7 +177,7 @@ Después de esto en nuestro `Vagrantfile` tenemos que indicar:
 2. Dónde se encuentran los playbooks que vamos a utilizar.
 3. Dónde se encuentra el inventario si no usamos el por defecto.
 
-> Para más información se puede consultar el [Vagrantfile][enlace_vagrantfile] y los [ficheros de configuración] de Ansible.
+> Para más información se puede consultar el [Vagrantfile][enlace_vagrantfile] y los ficheros de configuración de Ansible.
 
 ## Despliegue en Azure
 Para el despliegue de la MV en Azure se han seguido los siguientes pasos:
